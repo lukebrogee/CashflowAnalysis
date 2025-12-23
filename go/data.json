@@ -1,0 +1,147 @@
+{
+  "test": {
+    "linked_institutions": [
+      {
+        "access_token": "access-sandbox-3e6d70c9-5ad4-4edb-ab95-14a628e4a2cf",
+        "item_id": "EdJ7514E3Nt6k83jJrQ4igx9lQgzyVHX9Dbma",
+        "institution_name": "Huntington Bank",
+        "institution_id": "ins_21",
+        "accounts": [
+          {
+            "account_id": "n7v4zKV1AptpGqebWwRJs7K6GDaPz7iAVz5Kw",
+            "account_balance": {
+              "available": 100,
+              "current": 110,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "0000",
+            "name": "Plaid Checking",
+            "official_name": "Plaid Gold Standard 0% Interest Checking",
+            "subtype": "checking",
+            "type": "depository"
+          },
+          {
+            "account_id": "bKZpJ1VQy3hqGgX1WDj8c9N5xVqlm9hmKWkNZ",
+            "account_balance": {
+              "available": 200,
+              "current": 210,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "1111",
+            "name": "Plaid Saving",
+            "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+            "subtype": "savings",
+            "type": "depository"
+          },
+          {
+            "account_id": "mjvJkqVZALFWElpbVgAjfKMo6VdGwKigp1oMJ",
+            "account_balance": {
+              "available": 12060,
+              "current": 12060,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "9002",
+            "name": "Plaid Cash Management",
+            "official_name": "Plaid Growth Cash Management",
+            "subtype": "cash management",
+            "type": "depository"
+          }
+        ],
+        "created_at": "2025-12-18T16:25:00-05:00",
+        "updated_at": "2025-12-18T16:25:00-05:00"
+      },
+      {
+        "access_token": "access-sandbox-5d7446a1-c995-4c2b-9a87-c5d241889b57",
+        "item_id": "BzVlP7WQxqI47Lo7NkNWflAZZNeZbxfwJqrk6",
+        "institution_name": "Chase",
+        "institution_id": "ins_56",
+        "accounts": [
+          {
+            "account_id": "aandpjGMVES57KX78B8QHmlmJV488bsZnqNJj",
+            "account_balance": {
+              "available": 100,
+              "current": 110,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "0000",
+            "name": "Plaid Checking",
+            "official_name": "Plaid Gold Standard 0% Interest Checking",
+            "subtype": "checking",
+            "type": "depository"
+          },
+          {
+            "account_id": "4QEvLldK83i8l5VlaBarsGkGWqJ77nSJWeoVj",
+            "account_balance": {
+              "available": 200,
+              "current": 210,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "1111",
+            "name": "Plaid Saving",
+            "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+            "subtype": "savings",
+            "type": "depository"
+          }
+        ],
+        "created_at": "2025-12-19T18:08:58-05:00",
+        "updated_at": "2025-12-19T18:08:58-05:00"
+      },
+      {
+        "access_token": "access-sandbox-e5ee56fa-ed40-4389-91f1-4b8410949682",
+        "item_id": "KKNkmgWjpqSr1rryrK7ZsQXA743JZetV3gMJR",
+        "institution_name": "PNC",
+        "institution_id": "ins_13",
+        "accounts": [
+          {
+            "account_id": "1qMZanBjPNT5Q55X5xvZSLqxBw4x64CpjD5jP",
+            "account_balance": {
+              "available": 100,
+              "current": 110,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "0000",
+            "name": "Plaid Checking",
+            "official_name": "Plaid Gold Standard 0% Interest Checking",
+            "subtype": "checking",
+            "type": "depository"
+          },
+          {
+            "account_id": "LrNl98w7gKcxLxxMx7wQC5V1Px71e7Skj3Pj6",
+            "account_balance": {
+              "available": 200,
+              "current": 210,
+              "limit": null,
+              "iso_currency_code": "USD",
+              "unofficial_currency_code": null
+            },
+            "mask": "1111",
+            "name": "Plaid Saving",
+            "official_name": "Plaid Silver Standard 0.1% Interest Saving",
+            "subtype": "savings",
+            "type": "depository"
+          }
+        ],
+        "created_at": "2025-12-19T18:10:03-05:00",
+        "updated_at": "2025-12-19T18:10:03-05:00"
+      }
+    ]
+  },
+  "user63": {
+    "linked_institutions": null
+  },
+  "user771": {
+    "linked_institutions": null
+  }
+}

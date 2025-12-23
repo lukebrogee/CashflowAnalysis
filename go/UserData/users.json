@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "test",
+      "linkedAccounts": [
+        {
+          "plaid": {
+            "item_id": "item_abc123",
+            "access_token": "access-sandbox-..."
+          }
+        }
+      ]
+    }
+  ]
+}
