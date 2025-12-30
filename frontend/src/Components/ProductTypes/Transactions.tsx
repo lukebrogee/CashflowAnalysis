@@ -1,3 +1,18 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     Transactions.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Displays all transactions from all users registered account
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+Dec-30-2025   Switched api call from /api/transactions to /api/all-transactions
+------------------------------------------------------------------
+*/
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import Endpoint from "../Endpoint";
 import {
@@ -33,7 +48,7 @@ function Transactions() {
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch("/api/transactions", { signal: ac.signal });
+        const res = await fetch("/api/all-transactions", { signal: ac.signal });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setTransactions(data.latest_transactions ?? []);

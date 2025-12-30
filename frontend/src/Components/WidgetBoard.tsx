@@ -1,3 +1,18 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     WidgetBoard.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Widget Board designed to hold graphic components holding data from user accounts
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+Dec-30-2025   Disabled Widget Board features do to bugs
+------------------------------------------------------------------
+*/
 import React from "react";
 import Transactions from "./ProductTypes/Transactions";
 import SpendAnalyzer from "./ProductTypes/SpendAnalyzer";
@@ -22,18 +37,18 @@ function WidgetBoard() {
 <div style={{width: "1400px"}} className="grid">
   <div className="row">
     <div style={widget} className="col-8">
-      <SpendAnalyzer/>
+      {/*<SpendAnalyzer/>*/}
     </div>
     <div style={widget} className="col-4">
-      <Transactions/>
+      {/*<Transactions/>*/}
     </div>
   </div>
   <div className="row">
     <div style={widget} className="col-4">
-      <SpendAnalyzer/>
+      {/*<SpendAnalyzer/>*/}
     </div>
     <div style={widget} className="col-8">
-      <Transactions/>
+      {/*<SpendAnalyzer/>*/}
     </div>
   </div>
 </div>

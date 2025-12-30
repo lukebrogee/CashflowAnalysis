@@ -1,4 +1,18 @@
-package cookies
+/*
+------------------------------------------------------------------
+FILE NAME:     helper.go
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Helper functions for cookie handling: writing, reading, signing, and encrypting cookies.
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+------------------------------------------------------------------
+*/
+package cookiehandler
 
 import (
 	"crypto/aes"

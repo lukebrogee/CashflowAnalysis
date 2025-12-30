@@ -1,20 +1,43 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     SignUp.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Form for creating a new user
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+Dec-30-2025   Added password to sign up form and authentication
+------------------------------------------------------------------
+*/
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Auth/AuthContext";
-
 
 function SignUpComponent() {
       const navigate = useNavigate();
     const [username, setUsername] = React.useState("");
-    const {login} = useAuth();
+    const [password, setPassword] = React.useState("");
     const handleSignUp = () => {
-        // Implement your signup logic here
-        fetch(`/api/signup/${username}`, { method: "POST" })
+        fetch(`/api/signup/`, { 
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+                username: username,
+                password: password
+             }),
+            credentials: "include"
+        })
             .then(response => {
                 if (response.ok) {
-                    console.log("Signup successful");
-                    login(username);
-                    navigate("/dashboard");
+                    console.log("signup successful");
+                    navigate("/dashboard"); 
+                } else {
+                    console.log("signup failed");
                 }
             })
             .catch(error => {
@@ -29,6 +52,10 @@ function SignUpComponent() {
                 <label>
                     Username:
                     <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+                </label>
+                <label>
+                    Password:
+                    <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
                 </label>
                 <br />
                 <button type="submit">Sign Up</button>

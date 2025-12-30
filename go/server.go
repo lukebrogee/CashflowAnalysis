@@ -1,3 +1,21 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     server.go
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Controls the main server operations, handling API requests and responses.
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+Dec-25-2025   Updated login() and signup(). Added logout() and checkAuthorization()
+-		      Added api calls /api/check-auth and /api/logout updated /api/login:username
+-	          to /api/login and /api/signup/:username to /api/signup
+
+------------------------------------------------------------------
+*/
 package main
 
 import (
@@ -12,6 +30,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	userauth "cashflowanalysis/UserAuth"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -120,8 +140,10 @@ func main() {
 	r.GET("/api/cra/get_income_insights", getCraIncomeInsightsHandler)
 	r.GET("/api/cra/get_partner_insights", getCraPartnerInsightsHandler)
 
-	r.POST("/api/login/:username", login)
-	r.POST("/api/signup/:username", signup)
+	r.POST("/api/login/", login)
+	r.POST("/api/logout/", logout)
+	r.POST("/api/signup/", signup)
+	r.GET("/api/check_auth/", checkAuthorization)
 	r.POST("/api/save_user_account/:username", StoreAccountData)
 	r.GET("/api/all-transactions", GetAllTransactions)
 
@@ -155,28 +177,72 @@ func renderError(c *gin.Context, originalErr error) {
 	c.JSON(http.StatusInternalServerError, gin.H{"error": originalErr.Error()})
 }
 
+// Creates a new user and store their credentials in the database
+// Authorizes user on sign up
 func signup(c *gin.Context) {
-	username := c.Param("username")
-
-	err := StoreNewUserData(username)
-	if err != nil {
+	var recBody struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	if err := c.ShouldBindJSON(&recBody); err != nil {
 		renderError(c, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "Signup failed"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Signup successful"})
+	userauth.CreateNewUser(recBody.Username, recBody.Password)
 
-	// Implement your signup logic here
+	if userauth.AuthorizeUser(c.Writer, recBody.Username, recBody.Password) {
+		c.JSON(http.StatusOK, gin.H{"message": "Signup successful"})
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "Signup failed"})
+	}
 }
 
+// Logs in user with the credentials given
+// Authorizes user on login
 func login(c *gin.Context) {
-	username := c.Param("username")
-
-	// Implement your login logic here
-	if username == "test" {
+	var recBody struct {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	if err := c.ShouldBindJSON(&recBody); err != nil {
+		renderError(c, err)
+		return
+	}
+	if userauth.AuthorizeUser(c.Writer, recBody.Username, recBody.Password) {
 		c.JSON(http.StatusOK, gin.H{"message": "Login successful"})
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"message": "Login failed"})
+	}
+}
+
+// Logs out user and unauthorizes them
+func logout(c *gin.Context) {
+	if userauth.UnauthorizeUser(c.Request, c.Writer) {
+		c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+	}
+
+	//still "logout" user on the frontend
+	c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+	/*
+	   401 Unauthorized	User is trying to log out
+	   403 Forbidden	Logout should always be allowed
+	   404 Not Found	Logout endpoint always exists
+	   500 Internal Server Error	Only if DB/system actually failed
+	*/
+}
+
+// Review the cookie from the client side to check if its still active
+func checkAuthorization(c *gin.Context) {
+	authorized, err := userauth.CheckUserAuthorization(c.Request, c.Writer)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"authorized": false})
+		return
+	} else {
+		if authorized {
+			c.JSON(http.StatusOK, gin.H{"authorized": true})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"authorized": true})
+		}
 	}
 }
 

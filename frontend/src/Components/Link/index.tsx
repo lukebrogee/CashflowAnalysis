@@ -1,14 +1,27 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     index.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+Logic for accessing a banking account
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+Dec-30-2025   Added auth to bring username to the backend
+------------------------------------------------------------------
+*/
 import React, { useEffect, useContext } from "react";
 import { usePlaidLink } from "react-plaid-link";
 import Button from "plaid-threads/Button";
 
 import Context from "../../Context";
-import { useAuth } from "../../Auth/AuthContext";
 
 const Link = () => {
 
 
-  const { user: username } = useAuth();
   const { linkToken, isPaymentInitiation, isCraProductsExclusively, dispatch } =
     useContext(Context);
 
@@ -16,7 +29,7 @@ const Link = () => {
     (public_token: string) => {
       // If the access_token is needed, send public_token to server
       const exchangePublicTokenForAccessToken = async () => {
-        const response = await fetch(`/api/save_user_account/${username}`, {
+        const response = await fetch(`/api/save_user_account/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
