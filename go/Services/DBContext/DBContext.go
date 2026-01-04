@@ -14,6 +14,7 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added functions initializeDB(), CreateObjectDB(), LoadObjectDB(), and DeleteObjectDB()
+Jan-04-2026   Updated LoadObjectDB() to return an array of T values
 ------------------------------------------------------------------
 */
 package services
@@ -53,7 +54,7 @@ func initializeDB() {
 }
 
 // Creates a new row of data for the given "table" interface
-func CreateObjectDB(entity interface{}) (int64, error) {
+func CreateObjectDB(entity interface{}) (int, error) {
 	ctx := context.Background()
 	var err error
 
@@ -95,7 +96,7 @@ func CreateObjectDB(entity interface{}) (int64, error) {
 
 	//Call database to store
 	row := stmt.QueryRowContext(ctx, args...)
-	var newID int64
+	var newID int
 	err = row.Scan(&newID)
 	if err != nil {
 		return -1, err
@@ -105,10 +106,10 @@ func CreateObjectDB(entity interface{}) (int64, error) {
 }
 
 // Loads one row of data dependant on the conditions given
-func LoadObjectDB[T any](entity *T, conditions ...string) (T, error) {
+func LoadObjectDB[T any](entity *T, conditions ...string) ([]T, error) {
 
 	ctx := context.Background()
-	var result T
+	var result []T
 
 	if len(conditions) == 0 {
 		return result, fmt.Errorf("LoadObjectDB: at least one condition field must be specified")
@@ -133,7 +134,7 @@ func LoadObjectDB[T any](entity *T, conditions ...string) (T, error) {
 	}
 
 	//Build connection string
-	whereString := strings.Join(whereClauses, "AND")
+	whereString := strings.Join(whereClauses, " AND ")
 	tsql := fmt.Sprintf("SELECT %s FROM %s WHERE %s;", strings.Join(fieldNames, ","), tableName, whereString)
 
 	//prepare sql connection
@@ -143,13 +144,13 @@ func LoadObjectDB[T any](entity *T, conditions ...string) (T, error) {
 	}
 	defer rows.Close()
 
-	for rows.Next() {
+	// Ensure caller passed a pointer-to-struct type for entity
+	entityType := reflect.TypeOf(entity)
+	if entityType.Kind() != reflect.Ptr || entityType.Elem().Kind() != reflect.Struct {
+		return result, fmt.Errorf("LoadObjectDB: entity must be pointer to struct")
+	}
 
-		// Ensure caller passed a pointer-to-struct type for entity
-		entityType := reflect.TypeOf(entity)
-		if entityType.Kind() != reflect.Ptr || entityType.Elem().Kind() != reflect.Struct {
-			return result, fmt.Errorf("LoadObjectDB: entity must be pointer to struct")
-		}
+	for rows.Next() {
 
 		// Create a new pointer to a zero value of the struct (e.g., *MyStruct)
 		newEntity := reflect.New(entityType.Elem())
@@ -173,7 +174,8 @@ func LoadObjectDB[T any](entity *T, conditions ...string) (T, error) {
 
 		// Convert the newly populated pointer value to T and return it
 		out := newEntity.Elem().Interface().(T)
-		return out, nil
+		result = append(result, out)
+		//return out, nil
 	}
 
 	return result, nil
@@ -218,7 +220,7 @@ func UpdateObjectDB(entity interface{}, conditions ...string) error {
 	}
 
 	//Build connection stirng
-	whereString := strings.Join(whereClauses, "AND")
+	whereString := strings.Join(whereClauses, " AND ")
 	tsql := fmt.Sprintf("UPDATE %s SET %s WHERE %s;", tableName, strings.Join(fieldNamesFinal, ","), whereString)
 
 	//Call sql database
@@ -256,7 +258,7 @@ func DeleteObjectDB(entity interface{}, conditions ...string) error {
 	}
 
 	//Build connection string
-	whereString := strings.Join(whereClauses, "AND")
+	whereString := strings.Join(whereClauses, " AND ")
 	tsql := fmt.Sprintf("DELETE FROM %s WHERE %s;", tableName, whereString)
 
 	//Call sql database

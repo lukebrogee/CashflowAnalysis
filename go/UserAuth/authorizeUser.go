@@ -11,6 +11,7 @@ Also serves to unauthorize a user by invalidating their session.
 $HISTORY:
 
 Dec-24-2025   Created initial file.
+Jan-06-2025   Minor updating for the updated DBContext handlers
 ------------------------------------------------------------------
 */
 package userauth
@@ -42,9 +43,12 @@ func AuthorizeUser(w http.ResponseWriter, username string, password string) bool
 	user := services.DB_Users{
 		Username: username,
 	}
-	user, err := services.LoadObjectDB[services.DB_Users](&user, "Username")
+	users, err := services.LoadObjectDB[services.DB_Users](&user, "Username")
 	if err != nil {
 		return false
+	}
+	if len(users) > 0 {
+		user = users[0]
 	}
 	if !checkPasswordHash(password, user.PasswordHash) {
 		return false
@@ -52,7 +56,7 @@ func AuthorizeUser(w http.ResponseWriter, username string, password string) bool
 
 	sessionId, expiry := activateSession(user)
 
-	_ = cookies.SetCookie(w, "session-id", strconv.FormatInt(sessionId, 10), expiry)
+	_ = cookies.SetCookie(w, "session-id", strconv.Itoa(sessionId), expiry)
 	return true
 }
 
@@ -72,17 +76,23 @@ func UnauthorizeUser(r *http.Request, w http.ResponseWriter) bool {
 		SessionId: intSessionId,
 	}
 	//Load session data
-	session, err = services.LoadObjectDB[services.DB_Sessions](&session, "SessionId")
+	sessions, err := services.LoadObjectDB[services.DB_Sessions](&session, "SessionId")
 	if err != nil {
 		return false
+	}
+	if len(sessions) > 0 {
+		session = sessions[0]
 	}
 
 	user := services.DB_Users{
 		UserId: session.UserId,
 	}
-	user, err = services.LoadObjectDB[services.DB_Users](&user, "UserId")
+	users, err := services.LoadObjectDB[services.DB_Users](&user, "UserId")
 	if err != nil {
 		return false
+	}
+	if len(users) > 0 {
+		user = users[0]
 	}
 	// Delete session-id cookie (expire in past)
 	_ = cookies.SetCookie(w, "session-id", "", DeleteCookieExpiry)
@@ -110,9 +120,12 @@ func CheckUserAuthorization(r *http.Request, w http.ResponseWriter) (bool, error
 		SessionId: intSessionId,
 	}
 
-	session, err = services.LoadObjectDB[services.DB_Sessions](&session, "SessionId")
+	sessions, err := services.LoadObjectDB[services.DB_Sessions](&session, "SessionId")
 	if err != nil {
 		return false, err
+	}
+	if len(sessions) > 0 {
+		session = sessions[0]
 	}
 
 	//True if Revoked At time is null
@@ -130,7 +143,7 @@ func CheckUserAuthorization(r *http.Request, w http.ResponseWriter) (bool, error
 			newExpiry := sessionExpiry()
 			_ = cookies.SetCookie(w, "session-id", sessionID, newExpiry)
 			session.ExpiresAt = newExpiry
-			_ = services.UpdateObjectDB(session, "SessionId")
+			services.UpdateObjectDB(session, "SessionId")
 			return true, nil
 		}
 	}
@@ -139,10 +152,10 @@ func CheckUserAuthorization(r *http.Request, w http.ResponseWriter) (bool, error
 }
 
 // Updates user to active and creates active session in database
-func activateSession(user services.DB_Users) (int64, time.Time) {
+func activateSession(user services.DB_Users) (int, time.Time) {
 	user.IsActive = true
 	user.UpdatedAt = time.Now().UTC()
-	_ = services.UpdateObjectDB(user, "UserId")
+	services.UpdateObjectDB(user, "UserId")
 
 	expiry := sessionExpiry()
 	createdAt := time.Now().UTC()
