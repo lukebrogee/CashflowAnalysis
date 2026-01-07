@@ -1,0 +1,26 @@
+.circledx {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #e53935;
+  position: relative;
+}
+
+.circledx::before,
+.circledx::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 3px;
+  background-color: #e53935;
+}
+
+.circledx::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.circledx::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
