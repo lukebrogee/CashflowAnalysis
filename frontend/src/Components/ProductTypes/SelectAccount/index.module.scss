@@ -1,0 +1,109 @@
+.AccountButton, .AccountButtonClicked {
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+    .AccountButton:hover {
+        background-color: #1ECD97;
+    }
+
+    .AccountButtonClicked {
+        background-color: #1ECD97;
+    }
+
+.AccountName {
+    font-size: 20px;
+}
+
+.MaskID, .AddedAt {
+    font-size: 14px;
+}
+
+.popupPositioning {
+    z-index: 1000;
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    align-content: center;
+}
+
+.container {
+    border: 2px solid grey;
+    border-radius: 8px;
+    width: 300px;
+    height: 500px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.AccountScreenTop {
+    justify-items: center;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+    .AccountScreenTop h1 {
+        font-size:xx-large;
+    }
+    .AccountScreenTop hr {
+        border: none;
+        height: 1px;
+        background-color: grey;
+    }
+
+.AccountScrollBox {
+    overflow-y: auto;
+    height: 100%;
+}
+
+    .AccountScrollBox::-webkit-scrollbar {
+        display: none;
+    }
+
+.SubmitBox {
+    margin-top: 10px;
+    justify-items: center;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+  align-items: center;
+}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
+
+.loadingScreen, .errorScreen, .noAccountsScreen {
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    align-content: center;
+}
+
+.errorScreen h1, .noAccountsScreen h1 {
+    font-size: 20px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.closexButtonDiv {
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  cursor: pointer;
+}
+
+.errorMessageBox {
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: red;
+}

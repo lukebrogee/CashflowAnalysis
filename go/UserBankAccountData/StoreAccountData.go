@@ -11,6 +11,7 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Jan-04-2026   Added StoreUserPlaidData()
+Jan-06-2026   Added SaveWidgetData()
 ------------------------------------------------------------------
 */
 package userbankaccountdata
@@ -20,6 +21,7 @@ import (
 	"net/http"
 
 	plaidServices "cashflowanalysis/PlaidComponents"
+	services "cashflowanalysis/Services/DBContext"
 )
 
 // After retrieving the accesstoken, gather institution and account data.
@@ -46,4 +48,20 @@ func StoreUserPlaidData(r *http.Request, publicToken string) bool {
 	}
 
 	return true
+}
+
+// Links bank accounts to a specific widget on the users screen
+func SaveWidgetData(r *http.Request, userWidgetID int, institutionID int, accountID int) int {
+	uw := services.DB_UserWidgets{
+		WidgetID:      0,
+		UserWidgetID:  userWidgetID,
+		InstitutionID: institutionID,
+		AccountID:     accountID,
+	}
+
+	widgetID, err := services.CreateObjectDB(&uw)
+	if err != nil {
+		return 0
+	}
+	return widgetID
 }

@@ -14,6 +14,7 @@ Dec-25-2025   Updated login() and signup(). Added logout() and checkAuthorizatio
 -		      Added api calls /api/check-auth and /api/logout updated /api/login:username
 -	          to /api/login and /api/signup/:username to /api/signup
 Jan-04-2025   Moved all plaid handlers and components, added /api/retrieve_user_account/
+Jan-06-2025   Added /api/SaveWidgetAccount/ with SaveWidgetAccount()
 
 ------------------------------------------------------------------
 */
@@ -23,6 +24,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 
 	plaidServices "cashflowanalysis/PlaidComponents"
 	userauth "cashflowanalysis/UserAuth"
@@ -92,6 +94,7 @@ func main() {
 	r.POST("/api/save_user_account/", StoreAccountData)
 	r.GET("/api/retrieve_user_account/", RetrieveAccountData)
 	r.GET("/api/all-transactions/", GetAllTransactions)
+	r.POST("/api/SaveWidgetAccount", SaveWidgetAccount)
 
 	err := r.Run(":" + APP_PORT)
 	if err != nil {
@@ -200,6 +203,29 @@ func RetrieveAccountData(c *gin.Context) {
 		"accounts":         accounts,
 		"account_balances": accountBalances,
 	})
+}
+
+// Links users bank account to a specific widget on the client side
+func SaveWidgetAccount(c *gin.Context) {
+	var body struct {
+		UserWidgetID  string `json:"userWidgetID"`
+		InstitutionID int    `json:"institutionID"`
+		AccountID     int    `json:"accountID"`
+	}
+	if err := c.ShouldBindJSON(&body); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save account to widget."})
+		return
+	}
+
+	userWidgetID, _ := strconv.Atoi(body.UserWidgetID)
+
+	widgetID := accData.SaveWidgetData(c.Request, userWidgetID, body.InstitutionID, body.AccountID)
+	if widgetID == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save account to widget."})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Account saved to widget successfully."})
 }
 
 func GetAllTransactions(c *gin.Context) {

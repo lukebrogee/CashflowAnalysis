@@ -12,6 +12,7 @@ $HISTORY:
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added DB_Session{} and DB_Users{}
 Jan-04-2026   Added DB_LinkedInstitutions{}, DB_LinkedAccounts{}, DB_AccountBalance{}
+Jan-06-2026   Added DB_UserWidgets{}
 ------------------------------------------------------------------
 */
 package services
@@ -75,4 +76,11 @@ type DB_AccountBalance struct {
 	AccountLastUpdatedAt   *time.Time
 	CreatedAt              time.Time
 	UpdatedAt              time.Time
+}
+
+type DB_UserWidgets struct {
+	WidgetID      int `db:"id"`
+	UserWidgetID  int
+	InstitutionID int
+	AccountID     int
 }
