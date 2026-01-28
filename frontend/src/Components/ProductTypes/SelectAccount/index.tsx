@@ -10,6 +10,7 @@ Component to select bank account for visual components
 $HISTORY:
 
 Jan-06-2026   Created initial file.
+Jan-28-2026   Added screen for choosing widget type
 ------------------------------------------------------------------
 */
 import styles from "./index.module.scss";
@@ -18,15 +19,14 @@ import {NavigateButton} from "../../CustomTags/Buttons/NavigateButton"
 import {CloseXButton} from "../../CustomTags/Buttons/CloseXButton"
 import {CircleErrorX} from "../../CustomTags/Icons/CircleErrorX"
 import {useState, useEffect} from "react"
+import { WidgetData, WidgetTypes } from "../Widget";
+import { PopupBack } from "../../CustomTags/PopupBack";
 
-export interface WidgetData {
-    widgetID: string,
-    widgetTypes: string[]
-}
-
+//Props for SelectAccountScreen
 interface SelectAccountScreenProps {
   wd: WidgetData;
   onClose: () => void;
+  updatedwd: (updatedWidgetData: WidgetData) => void;
 }
 
 type ButtonState = "idle" | "loading" | "success";
@@ -34,17 +34,20 @@ type ButtonState = "idle" | "loading" | "success";
 export const SelectAccountScreen = ({
   wd,
   onClose,
+  updatedwd,
 }: SelectAccountScreenProps) => {
 
     //Changing screens
-    const [loadingAccounts, setLoadingAccounts] = useState<boolean>(true);
+    const [loadingAccounts, setLoadingAccounts] = useState<boolean>(false);
     const [errorLoading, setErrorLoading] = useState<boolean>(false);
+    const [chooseWidget, setChooseWidget] = useState<boolean>(true)
 
     //Adusting components
     const [btnState, setBtnState] = useState<ButtonState>("idle");
     const [errorMessage, setErrorMessage] = useState<string>();
 
     //Holding data
+    const [widgetType, setWidgetType] = useState<string>("");
     const [accounts, setAccounts] = useState<any[]>([]);
     const [institutions, setInstitutions] = useState<any[]>([]);
     const [accInfo, setAccInfo] = useState<AccountInformation[]>([]);
@@ -70,9 +73,10 @@ export const SelectAccountScreen = ({
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ 
-                userWidgetID: wd.widgetID,
-                institutionID: institutionID,
-                accountID: accountID,
+                WidgetID: wd.WidgetID, 
+                WidgetType: widgetType,    
+                InstitutionID: [institutionID],
+                AccountID: [accountID],
             }),
         });
 
@@ -86,7 +90,11 @@ export const SelectAccountScreen = ({
         //Leave timeout to show full animation
         setTimeout(() => {
             onClose();
-        }, 1000);
+        }, 2000);
+        wd.WidgetType = widgetType;
+        //Notify parent of update with new widget data
+        updatedwd(wd)
+        
         return ok;
         } catch (e: any) {
             setBtnState("idle");
@@ -99,6 +107,7 @@ export const SelectAccountScreen = ({
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoadingAccounts(true)
                 const response = await fetch("/api/retrieve_user_account/", {
                     method: "GET",
                     credentials: "include",
@@ -122,14 +131,22 @@ export const SelectAccountScreen = ({
             }
         }
         fetchData();
-    },[])
+    },[widgetType])
 
     //Wants accounts have been loaded format data
     useEffect(() => {
         function createAccountInformation() {
             var createAccounts: AccountInformation[] = [];
-            accounts.forEach((account) => {
-                if (!wd.widgetTypes.includes(account.Type)) return;
+            accounts.forEach(account => {
+            const isValid = WidgetTypes.some(([name, accountTypes]) => {
+                if (name !== widgetType) return false;
+                return accountTypes.includes(account.Type);
+            });
+
+            if (!isValid) {
+                return; // skip this account only
+            }
+                
 
                 var insName = "";
                 institutions.forEach((ins) => {
@@ -159,77 +176,91 @@ export const SelectAccountScreen = ({
         createAccountInformation();
     },[accounts])
 
+    //Once widget type is chosen move to account selection
+    const handleWidgetChoice = (wt: string) => {
+        setWidgetType(wt)
+        setChooseWidget(false)
+    }
 
     return (
         <>
-            <div className={styles.popupPositioning}>
-                <div className={styles.container}>
-                    <div className={styles.closexButtonDiv}>
-                        <CloseXButton onClose={onClose} />
-                    </div>
-                    
-                    {(loadingAccounts) ? (
-                        <>
-                            <div className={styles.loadingScreen}>
-                                <div className={styles.loader}></div>
-                            </div>
-                            
-                        </>
-                    ) : (errorLoading) ? (
-                        <>
-                            <div className={styles.errorScreen}>
-                                <CircleErrorX/>
-                                <h1>Error loading account data</h1>
-                            </div>
-                        </>
-                    ) : (accInfo.length === 0) ? (
-                        <>
-                            <div className={styles.noAccountsScreen}>
-                                <h1>No bank accounts to add to widget</h1>
-                                <br/>
-                                <h1>Add accounts here</h1>
-                                <NavigateButton navigateTo="/authenticate-account" name="Authenticate Account"/>
-                            </div>                
-                        </>
-                    ) : (
-                        <>
-                            <div className={styles.AccountScreenTop}>
-                                <h1>Select Account</h1>
-                                <hr/>
-                            </div>
-                            <div className={styles.AccountScrollBox}>
-                                {accInfo.map(acc => {
-                                    const isSelected = acc.AccountID === selectedAccount[1];
-                                    const accData: AccountInformation = {
-                                        institutionName: acc.institutionName,
-                                        institutionID: acc.institutionID,
-                                        AccountName: acc.AccountName,
-                                        AccountID: acc.AccountID,
-                                        Mask: acc.Mask,
-                                        AddedAt: acc.AddedAt,
-                                    };
-
-                                return (
-                                    <AccountButton key={acc.AccountID} selected={isSelected} acc={accData}  onClick={() =>setSelectedAccount([acc.institutionID, acc.AccountID])}/>
-                                );
-                                })}
-                            </div>
-                            <div className={styles.SubmitBox}>
-                                {errorMessage && 
-                                    <div className={styles.errorMessageBox}>
-                                        {errorMessage}
-                                    </div> 
-                                }
-                                <LoadButton 
-                                    state={btnState}
-                                    onClick={handleClick}
-                                    onSuccessDone={() => {setBtnState("idle");}}
-                                />
-                            </div>                        
-                        </>    
-                    )}
+            <PopupBack height="70" width="25">
+                <div className={styles.closexButtonDiv}>
+                    <CloseXButton onClose={onClose} />
                 </div>
-            </div>
+                
+                {(chooseWidget) ? (
+                    <>
+                        <div className={styles.ChooseWidgetScreen}>
+                            <h1>Choose<br/>Widget</h1>
+                            </div>
+                        <div className={styles.ChooseWidgetScroll}>
+                            {WidgetTypes.map(([name]) => (
+                                <button onClick={() => handleWidgetChoice(name)} className={styles.widgetButton}><h1>{name}</h1></button>
+                            ))}                                
+                        </div>
+                    </>
+                ) : (loadingAccounts) ? (
+                    <>
+                        <div className={styles.loadingScreen}>
+                            <div className={styles.loader}></div>
+                        </div>
+                        
+                    </>
+                ) : (errorLoading) ? (
+                    <>
+                        <div className={styles.errorScreen}>
+                            <CircleErrorX/>
+                            <h1>Error loading account data</h1>
+                        </div>
+                    </>
+                ) : (accInfo.length === 0) ? (
+                    <>
+                        <div className={styles.noAccountsScreen}>
+                            <h1>No bank accounts to add to widget</h1>
+                            <br/>
+                            <h1>Add accounts here</h1>
+                            <NavigateButton navigateTo="/authenticate-account" name="Authenticate Account"/>
+                        </div>                
+                    </>
+                ) : (
+                    <>
+                        <div className={styles.AccountScreenTop}>
+                            <h1>Select Account</h1>
+                            <hr/>
+                        </div>
+                        <div className={styles.AccountScrollBox}>
+                            {accInfo.map(acc => {
+                                const isSelected = acc.AccountID === selectedAccount[1];
+                                const accData: AccountInformation = {
+                                    institutionName: acc.institutionName,
+                                    institutionID: acc.institutionID,
+                                    AccountName: acc.AccountName,
+                                    AccountID: acc.AccountID,
+                                    Mask: acc.Mask,
+                                    AddedAt: acc.AddedAt,
+                                };
+
+                            return (
+                                <AccountButton key={acc.AccountID} selected={isSelected} acc={accData}  onClick={() =>setSelectedAccount([acc.institutionID, acc.AccountID])}/>
+                            );
+                            })}
+                        </div>
+                        <div className={styles.SubmitBox}>
+                            {errorMessage && 
+                                <div className={styles.errorMessageBox}>
+                                    {errorMessage}
+                                </div> 
+                            }
+                            <LoadButton 
+                                state={btnState}
+                                onClick={handleClick}
+                                onSuccessDone={() => {setBtnState("idle");}}
+                            />
+                        </div>                        
+                    </>    
+                )}
+            </PopupBack>
         </>
     )
 }

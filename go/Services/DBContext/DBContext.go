@@ -15,6 +15,10 @@ $HISTORY:
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added functions initializeDB(), CreateObjectDB(), LoadObjectDB(), and DeleteObjectDB()
 Jan-04-2026   Updated LoadObjectDB() to return an array of T values
+Jan-28-2026   Added UpdateObjectDB(), changed parameters to accept maps of columns to change/add/remove
+
+	and added map for conditions
+
 ------------------------------------------------------------------
 */
 package services
@@ -23,6 +27,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"os"
 	"reflect"
 	"strings"
 
@@ -30,14 +35,20 @@ import (
 )
 
 var db *sql.DB
+var DATABASE_CONNECTION = ""
 
 // Creates connection to the azure sql database
 func initializeDB() {
-	connString := "Server=jbrogee2019.database.windows.net;Database=Empowr;User Id=jbrogeelogin19;Password=ZoeyIsGood19!!;"
+
+	DATABASE_CONNECTION = os.Getenv("DATABASE_CONNECTION")
+	if DATABASE_CONNECTION == "" {
+		panic("DATABASE_CONNECTION not set in environment")
+	}
+
 	var err error
 
 	// Create connection pool
-	db, err = sql.Open(azuread.DriverName, connString)
+	db, err = sql.Open(azuread.DriverName, DATABASE_CONNECTION)
 	if err != nil {
 		fmt.Printf("Error creating connection pool: %v\n", err)
 		return
@@ -76,6 +87,11 @@ func CreateObjectDB(entity interface{}) (int, error) {
 		if idTag == field.Name {
 			continue
 		}
+		isDBTag := hasDBTag(entity, field.Name)
+		if !isDBTag {
+			continue
+		}
+
 		fieldNames = append(fieldNames, field.Name)
 		placeholders = append(placeholders, "@"+field.Name)
 		args = append(args, sql.Named(field.Name, field.Value))
@@ -84,7 +100,7 @@ func CreateObjectDB(entity interface{}) (int, error) {
 	//Build connection string
 	tsql := fmt.Sprintf(`
       INSERT INTO %s (%s) VALUES (%s);
-      select isNull(SCOPE_IDENTITY(), -1);
+      SELECT ISNULL(CAST(SCOPE_IDENTITY() AS INT), -1);
     `, tableName, strings.Join(fieldNames, ","), strings.Join(placeholders, ","))
 
 	//Prepare sql connection
@@ -122,12 +138,16 @@ func LoadObjectDB[T any](entity *T, conditions ...string) ([]T, error) {
 		return result, err
 	}
 
-	fieldNames := make([]string, len(fields))
+	var fieldNames []string
 	var whereClauses []string
-	args := make([]interface{}, len(fields))
-	for i, field := range fields {
-		fieldNames[i] = field.Name
-		args[i] = sql.Named(field.Name, field.Value)
+	var args []interface{}
+	for _, field := range fields {
+		isDBTag := hasDBTag(entity, field.Name)
+		if !isDBTag {
+			continue
+		}
+		fieldNames = append(fieldNames, field.Name)
+		args = append(args, sql.Named(field.Name, field.Value))
 		if len(conditions) > 0 && contains(conditions, field.Name) {
 			whereClauses = append(whereClauses, fmt.Sprintf("%s = @%s", field.Name, field.Name))
 		}
@@ -156,9 +176,9 @@ func LoadObjectDB[T any](entity *T, conditions ...string) ([]T, error) {
 		newEntity := reflect.New(entityType.Elem())
 
 		// Prepare destinations for Scan: either field addresses or temporary holders
-		dests := make([]interface{}, len(fields))
-		for i := 0; i < len(fields); i++ {
-			f := newEntity.Elem().FieldByName(fields[i].Name)
+		dests := make([]interface{}, len(fieldNames))
+		for i := 0; i < len(fieldNames); i++ {
+			f := newEntity.Elem().FieldByName(fieldNames[i])
 			if f.IsValid() && f.CanAddr() {
 				dests[i] = f.Addr().Interface()
 			} else {
@@ -182,7 +202,7 @@ func LoadObjectDB[T any](entity *T, conditions ...string) ([]T, error) {
 }
 
 // Updates one row of data based on the conditions given
-func UpdateObjectDB(entity interface{}, conditions ...string) error {
+func UpdateObjectDB(entity interface{}, setValues []string, conditions []string) error {
 
 	ctx := context.Background()
 
@@ -197,19 +217,35 @@ func UpdateObjectDB(entity interface{}, conditions ...string) error {
 		return err
 	}
 
-	fieldNames := make([]string, len(fields))
+	//Skip adding ID
+	idTag, _ := FieldNameByDBTag(entity, "id")
+
+	var length int
+	if len(setValues) == 0 {
+		length = len(fields)
+	} else {
+		length = len(setValues) + 1 //Add one for ID
+	}
+	fieldNames := make([]string, length)
 	var whereClauses []string
-	args := make([]interface{}, len(fields))
-	for i, field := range fields {
-		fieldNames[i] = field.Name
-		args[i] = sql.Named(field.Name, field.Value)
+	args := make([]interface{}, length)
+	var fieldCounter int
+
+	for _, field := range fields {
+		if len(setValues) == 0 || (idTag == field.Name) || contains(setValues, field.Name) {
+			isDBTag := hasDBTag(entity, field.Name)
+			if !isDBTag {
+				continue
+			}
+			fieldNames[fieldCounter] = field.Name
+			args[fieldCounter] = sql.Named(field.Name, field.Value)
+			fieldCounter++
+		}
 		if len(conditions) > 0 && contains(conditions, field.Name) {
 			whereClauses = append(whereClauses, fmt.Sprintf("%s = @%s", field.Name, field.Name))
 		}
 	}
 
-	//Skip adding ID
-	idTag, _ := FieldNameByDBTag(entity, "id")
 	var fieldNamesFinal []string
 	for _, fieldName := range fieldNames {
 		if idTag == fieldName {
@@ -252,6 +288,10 @@ func DeleteObjectDB(entity interface{}, conditions ...string) error {
 	for i, field := range fields {
 		fieldNames[i] = field.Name
 		if len(conditions) > 0 && contains(conditions, field.Name) {
+			isDBTag := hasDBTag(entity, field.Name)
+			if !isDBTag {
+				continue
+			}
 			whereClauses = append(whereClauses, fmt.Sprintf("%s = @%s", field.Name, field.Name))
 			args[i] = sql.Named(field.Name, field.Value)
 		}

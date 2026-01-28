@@ -1,6 +1,17 @@
-import React, { useEffect, useContext, useCallback, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+/*
+------------------------------------------------------------------
+FILE NAME:     index.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
 
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+------------------------------------------------------------------
+*/
 
 const HomePage = () => {
 

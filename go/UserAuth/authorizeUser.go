@@ -12,6 +12,7 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Jan-06-2025   Minor updating for the updated DBContext handlers
+Jan-28-2026   Updated to use new DBContext functions and structs
 ------------------------------------------------------------------
 */
 package userauth
@@ -143,7 +144,7 @@ func CheckUserAuthorization(r *http.Request, w http.ResponseWriter) (bool, error
 			newExpiry := sessionExpiry()
 			_ = cookies.SetCookie(w, "session-id", sessionID, newExpiry)
 			session.ExpiresAt = newExpiry
-			services.UpdateObjectDB(session, "SessionId")
+			services.UpdateObjectDB(session, []string{"ExpiresAt"}, []string{"SessionId"})
 			return true, nil
 		}
 	}
@@ -155,7 +156,7 @@ func CheckUserAuthorization(r *http.Request, w http.ResponseWriter) (bool, error
 func activateSession(user services.DB_Users) (int, time.Time) {
 	user.IsActive = true
 	user.UpdatedAt = time.Now().UTC()
-	services.UpdateObjectDB(user, "UserId")
+	services.UpdateObjectDB(user, []string{"IsActive", "UpdatedAt"}, []string{"UserId"})
 
 	expiry := sessionExpiry()
 	createdAt := time.Now().UTC()
@@ -178,7 +179,7 @@ func activateSession(user services.DB_Users) (int, time.Time) {
 func unactivateSession(user services.DB_Users, session services.DB_Sessions) bool {
 	user.IsActive = false
 	user.UpdatedAt = time.Now().UTC()
-	err := services.UpdateObjectDB(user, "UserId")
+	err := services.UpdateObjectDB(user, []string{"IsActive", "UpdatedAt"}, []string{"UserId"})
 	if err != nil {
 		// Handle error
 		return false
@@ -187,7 +188,7 @@ func unactivateSession(user services.DB_Users, session services.DB_Sessions) boo
 	//Add revoked time
 	session.RevokedAt = sql.NullTime{Time: time.Now().UTC(), Valid: true}
 
-	err = services.UpdateObjectDB(session, "SessionId")
+	err = services.UpdateObjectDB(session, []string{"RevokedAt"}, []string{"SessionId"})
 	if err != nil {
 		// Handle error
 		return false

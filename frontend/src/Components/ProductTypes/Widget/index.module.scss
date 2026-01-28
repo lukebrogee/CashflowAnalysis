@@ -1,0 +1,110 @@
+.container {
+    display:flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    position: relative;
+}
+
+.DeleteWidgetButton {
+  position: absolute;
+  right: 25px;
+}
+
+.CloseDeleteWidgetScreen{
+  position: absolute;
+  top: 0px;
+  right: 25px;
+}
+
+.DeleteWidgetScreen h1 {
+  font-size: clamp(12px, 5vw, 12px);
+}
+
+.DeleteButtonDiv {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  align-items: center;
+  height: 100%;
+}
+
+.DeleteButtonDiv button {
+  border: 2px solid grey;
+  border-radius: 8px;
+  background-color: rgba(255,255,255, 0.8);
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+  .DeleteButtonDiv button:hover {
+    background-color: #1ECD97;
+  }
+
+.button, .widget {
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button {
+      cursor: pointer;
+}
+
+    
+.plus1, .plus2, .plus3 {
+  position: relative;
+  aspect-ratio: 1 / 1; /* prevents deformation */
+}
+
+/* size per layout (tweak numbers if you want bigger/smaller) */
+.plus1 { width: min(140px, 40%, 11vmin); } /* full row card */
+.plus2 { width: min(140px, 34%, 12vmin); } /* 2/3 card */
+.plus3 { width: min(140px, 30%, 25vmin); } /* 1/3 card */
+
+/* bars */
+.plus1::before, .plus1::after,
+.plus2::before, .plus2::after,
+.plus3::before, .plus3::after {
+  content: "";
+  position: absolute;
+  background: #333;
+  border-radius: 999px;
+  transition: background-color 0.25s ease;
+}
+
+.button:hover {
+    .plus1::before, .plus1::after,
+    .plus2::before, .plus2::after,
+    .plus3::before, .plus3::after {
+        background: gray;
+    }
+    border: 3px solid gray;
+    
+}
+
+/* thickness stays consistent across sizes */
+.plus1::before, .plus2::before, .plus3::before {
+  width: 100%;
+  height: clamp(6px, 0.8vw, 14px);
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.plus1::after, .plus2::after, .plus3::after {
+  height: 100%;
+  width: clamp(6px, 0.8vw, 14px);
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}

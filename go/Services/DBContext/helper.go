@@ -11,6 +11,7 @@ $HISTORY:
 
 Dec-30-2025   Created initial file.
 Dec-30-2025   Added FieldInfo{}, contains(), InspectInterface(), and FieldNameByDBTag()
+Jan-28-2026   Added hasDBTag()
 ------------------------------------------------------------------
 */
 package services
@@ -99,4 +100,26 @@ func FieldNameByDBTag(v interface{}, tagValue string) (string, error) {
 	}
 
 	return "", nil
+}
+
+// Checks if a specific field in a struct has the db tag
+func hasDBTag(v any, fieldName string) bool {
+	t := reflect.TypeOf(v)
+
+	// Handle pointer input
+	if t.Kind() == reflect.Ptr {
+		t = t.Elem()
+	}
+
+	if t.Kind() != reflect.Struct {
+		return false
+	}
+
+	field, found := t.FieldByName(fieldName)
+	if !found {
+		return false
+	}
+
+	dbTag := field.Tag.Get("db")
+	return dbTag != ""
 }
