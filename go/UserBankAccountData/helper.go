@@ -12,6 +12,7 @@ $HISTORY:
 
 Jan-04-2026   Created initial file.
 Jan-04-2026   Added storeInstitutionData() and storeAccountData()
+Jan-28-2026   Updated to use new DBContext functions and structs
 ------------------------------------------------------------------
 */
 package userbankaccountdata
@@ -46,7 +47,7 @@ func storeInstitutionData(userID int, accessToken string, itemId string, institu
 		li.LinkedInstitutionID, _ = services.CreateObjectDB(li)
 	} else {
 		li.LinkedInstitutionID = db_li.LinkedInstitutionID
-		_ = services.UpdateObjectDB(li, "UserID", "InstitutionID")
+		_ = services.UpdateObjectDB(li, []string{}, []string{"UserID", "InstitutionID"})
 		//Once the database has embedded foreign keys to delete LinkedAccounts and AccountBalance
 		//after LinkedInstitution is deleted this will not be necessary
 		deletela := services.DB_LinkedAccounts{

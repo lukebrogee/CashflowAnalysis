@@ -1,3 +1,17 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     AuthenticateAccountPage.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  Dec-24-2025
+--------------------------------------------------------------------
+DESCRIPTION:
+
+--------------------------------------------------------------------
+$HISTORY:
+
+Dec-24-2025   Created initial file.
+------------------------------------------------------------------
+*/
 import React, { useEffect, useContext, useCallback, useState } from "react";
 
 import Header from "../Components/Headers";
