@@ -11,9 +11,10 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Removed <BrowserRouter> tag
+Feb-24-2026   Updated path for TransactionsPage
 ------------------------------------------------------------------
 */
-import TransactionsPage from "./PagesPrivate/TransactionsPage";
+import TransactionsPage from "./PagesPrivate/TransactionPage/TransactionsPage";
 
 import Home from "./PagesPublic/HomePage";
 import 'bootstrap/dist/css/bootstrap.min.css';

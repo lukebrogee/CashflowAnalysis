@@ -13,6 +13,7 @@ $HISTORY:
 Jan-04-2026   Created initial file.
 Jan-04-2026   Added storeInstitutionData() and storeAccountData()
 Jan-28-2026   Updated to use new DBContext functions and structs
+Feb-24-2026   Updated DB_LinkedAccounts{} to include PlaidAccountID in storeAccountData()
 ------------------------------------------------------------------
 */
 package userbankaccountdata
@@ -76,6 +77,7 @@ func storeAccountData(linkedInstitutionID int, acc plaid.AccountBase) bool {
 		VerificationStatus:  acc.VerificationStatus,
 		CreatedAt:           time.Now().UTC(),
 		UpdatedAt:           time.Now().UTC(),
+		PlaidAccountID:      acc.AccountId,
 	}
 
 	if acc.Mask.IsSet() {

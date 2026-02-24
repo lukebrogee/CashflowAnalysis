@@ -14,10 +14,10 @@ Dec-30-2025   Added DB_Session{} and DB_Users{}
 Jan-04-2026   Added DB_LinkedInstitutions{}, DB_LinkedAccounts{}, DB_AccountBalance{}
 Jan-06-2026   Added DB_UserWidgets{}
 Jan-28-2026   Added DB_WidgetBoard{}, DB_WidgetBoardRows{}, DB_Widgets{}, DB_WidgetLinkedAccounts{}
-
-	Deleted DB_UserWidgets{}
-	Also added `db` tags to all structs for mapping purposes
-
+-             Deleted DB_UserWidgets{}
+-             Also added `db` tags to all structs for mapping purposes
+Feb-24-2026   Added DB_AccountTransactions{} and updated DB_LinkedInstitutions{} to include CursorID for transaction syncing.
+-             Updated DB_LinkedAccounts{} to include PlaidAccountID
 ------------------------------------------------------------------
 */
 package services
@@ -53,6 +53,7 @@ type DB_LinkedInstitutions struct {
 	InstitutionID       string    `db:"InstitutionID"`
 	CreatedAt           time.Time `db:"CreatedAt"`
 	UpdatedAt           time.Time `db:"UpdatedAt"`
+	CursorID            *string   `db:"CursorID"`
 }
 
 type DB_LinkedAccounts struct {
@@ -67,6 +68,7 @@ type DB_LinkedAccounts struct {
 	HolderCategory      *string   `db:"HolderCategory"`
 	CreatedAt           time.Time `db:"CreatedAt"`
 	UpdatedAt           time.Time `db:"UpdatedAt"`
+	PlaidAccountID      string    `db:"PlaidAccountID"`
 }
 
 type DB_AccountBalance struct {
@@ -81,6 +83,22 @@ type DB_AccountBalance struct {
 	AccountLastUpdatedAt   *time.Time `db:"AccountLastUpdatedAt"`
 	CreatedAt              time.Time  `db:"CreatedAt"`
 	UpdatedAt              time.Time  `db:"UpdatedAt"`
+}
+
+type DB_AccountTransactions struct {
+	TransactionID   string    `db:"TransactionID"`
+	AccountID       string    `db:"AccountID"`
+	Date            string    `db:"Date"`
+	MerchantName    *string   `db:"MerchantName"`
+	Name            string    `db:"Name"`
+	Amount          float64   `db:"Amount"`
+	IsoCurrencyCode *string   `db:"IsoCurrencyCode"`
+	AuthorizedDate  *string   `db:"AuthorizedDate"`
+	Pending         bool      `db:"Pending"`
+	PaymentChannel  string    `db:"PaymentChannel"`
+	Category        *string   `db:"Category"`
+	LastSyncedAt    time.Time `db:"LastSyncedAt"`
+	IsRemoved       bool      `db:"IsRemoved"`
 }
 
 type DB_WidgetBoard struct {

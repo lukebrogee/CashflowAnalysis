@@ -16,6 +16,8 @@ Dec-25-2025   Updated login() and signup(). Added logout() and checkAuthorizatio
 Jan-04-2025   Moved all plaid handlers and components, added /api/retrieve_user_account/
 Jan-06-2025   Added /api/SaveWidgetAccount/ with SaveWidgetAccount()
 Jan-28-2026   Moved all api methods to seperate files under the same package main
+Feb-24-2026   Added /api/syncTransactions/ and /api/retrieveAllTransactions/. Removed /api/all-transactions/
+-             Added services.InitializeDB() to init() to ensure only one connection pool is created
 
 ------------------------------------------------------------------
 */
@@ -29,6 +31,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	plaid "github.com/plaid/plaid-go/v31/plaid"
+
+	services "cashflowanalysis/Services/DBContext"
 )
 
 var APP_PORT = ""
@@ -43,6 +47,9 @@ func init() {
 	if APP_PORT == "" {
 		APP_PORT = "8000"
 	}
+
+	//Initialize the database connection pool
+	services.InitializeDB()
 }
 
 func main() {
@@ -63,7 +70,8 @@ func main() {
 	//User Bank Account Data Calls
 	r.POST("/api/save_user_account/", StoreAccountData)
 	r.GET("/api/retrieve_user_account/", RetrieveAccountData)
-	r.GET("/api/all-transactions/", GetAllTransactions)
+	r.GET("/api/syncTransactions/", SyncTransactions)
+	r.GET("/api/retrieveAllTransactions/", RetrieveAllTransactions)
 
 	//Widget Board Calls
 	r.POST("/api/SaveWidgetAccount", SaveWidgetAccount)

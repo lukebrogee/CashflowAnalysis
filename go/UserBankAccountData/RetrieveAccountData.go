@@ -11,6 +11,7 @@ $HISTORY:
 
 Jan-04-2026   Created initial file.
 Jan-04-2026   Added RetrieveAllUserAccountData()
+Feb-24-2026   Added RetrieveAllUserTransactions()
 ------------------------------------------------------------------
 */
 package userbankaccountdata
@@ -54,4 +55,21 @@ func RetrieveAllUserAccountData(r *http.Request) ([]services.DB_LinkedInstitutio
 		accountBalances = append(accountBalances, accBals...)
 	}
 	return institutions, accounts, accountBalances, nil
+}
+
+// Retrieves all transactions for the users accounts from the database
+func RetrieveAllUserTransactions(plaidAccoundIDs []string) ([]services.DB_AccountTransactions, error) {
+	var transactionsList []services.DB_AccountTransactions
+	for _, accID := range plaidAccoundIDs {
+		accTrans := services.DB_AccountTransactions{
+			AccountID: accID,
+		}
+		transactions, err := services.LoadObjectDB(&accTrans, "AccountID")
+		if err != nil {
+			return transactions, err
+		}
+		//Append transactions for each account to the total list of transactions
+		transactionsList = append(transactionsList, transactions...)
+	}
+	return transactionsList, nil
 }

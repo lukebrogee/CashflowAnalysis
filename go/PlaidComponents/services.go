@@ -11,6 +11,7 @@ $HISTORY:
 
 Jan-02-2026  Created initial file.
 Jan-04-2026  Added all plaid components
+Feb-24-2026  Updated Transactions() to take in a cursor and return added, modified, and removed transactions.
 ------------------------------------------------------------------
 */
 
@@ -24,7 +25,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"sort"
 	"strings"
 	"time"
 
@@ -224,16 +224,16 @@ func Item() (plaid.ItemWithConsentFields, plaid.Institution, error) {
 	return itemGetResp.GetItem(), institutionGetByIdResp.GetInstitution(), nil
 }
 
-func Transactions() (string, []plaid.Transaction, error) {
+func Transactions(accessToken string, Currentcursor **string) (
+	added []plaid.Transaction,
+	modified []plaid.Transaction,
+	removed []plaid.RemovedTransaction,
+	err error,
+) {
 	ctx := context.Background()
 
-	// Set cursor to empty to receive all historical updates
-	var cursor *string
+	cursor := *Currentcursor
 
-	// New transaction updates since "cursor"
-	var added []plaid.Transaction
-	var modified []plaid.Transaction
-	var removed []plaid.RemovedTransaction // Removed transaction ids
 	hasMore := true
 	// Iterate through each page of new transaction updates for item
 	for hasMore {
@@ -241,11 +241,12 @@ func Transactions() (string, []plaid.Transaction, error) {
 		if cursor != nil {
 			request.SetCursor(*cursor)
 		}
+
 		resp, _, err := client.PlaidApi.TransactionsSync(
 			ctx,
 		).TransactionsSyncRequest(*request).Execute()
 		if err != nil {
-			return "", nil, err
+			return nil, nil, nil, err
 		}
 
 		// Update cursor to the next cursor
@@ -270,16 +271,8 @@ func Transactions() (string, []plaid.Transaction, error) {
 		hasMore = resp.GetHasMore()
 	}
 
-	sort.Slice(added, func(i, j int) bool {
-		return added[i].GetDate() < added[j].GetDate()
-	})
-	_ = added[len(added)-9:]
-	//latestTransactions := added[len(added)-9:]
-
-	//c.JSON(http.StatusOK, gin.H{
-	//	"latest_transactions": latestTransactions,
-	//})
-	return *cursor, added, nil
+	*Currentcursor = cursor
+	return added, modified, removed, nil
 }
 
 /*--------------PLAID FUNCTIONS NOT USED YET--------------------------*/
