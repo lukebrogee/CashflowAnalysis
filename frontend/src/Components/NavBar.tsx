@@ -11,10 +11,11 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added logic for logout button
+Feb-24-2026   Updated path for TransactionsPage
 ------------------------------------------------------------------
 */
 import React from "react";
-import Transactions from "./ProductTypes/Transactions";
+import Transactions from "../PagesPrivate/TransactionPage/Transactions";
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from "../Auth/AuthContext";
 import { logout } from "../Auth/logout";
