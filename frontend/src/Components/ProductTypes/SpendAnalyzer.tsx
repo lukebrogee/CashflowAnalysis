@@ -7,7 +7,7 @@ interface Props {
   official_name: string;
   subtype: string;
   type: string;
-  balances: {avaialable: number, current: number, iso_currency:string};
+  balances: {available: number, current: number, iso_currency:string};
 }
 
 
@@ -15,13 +15,32 @@ function SpendAnalyzer() {
   const [accounts, setAccounts] = useState<Props[]>([]);
 
   useEffect(() => {
-    fetch("/api/accounts")
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        setAccounts(data.accounts);
-      })
-      .catch(err => console.error(err));
+    setAccounts([
+      {
+        account_id: "123",
+        name: "Chase Checking",
+        official_name: "Chase Total Checking",
+        subtype: "checking",
+        type: "depository",
+        balances: {
+          available: 1000,
+          current: 1000,
+          iso_currency: "USD",
+        },
+      },
+      {
+        account_id: "456",
+        name: "Chase Credit Card",
+        official_name: "Chase Freedom Unlimited",
+        subtype: "credit card",
+        type: "credit",
+        balances: {
+          available: 5000,
+          current: 2000,
+          iso_currency: "USD", 
+        },
+      },
+    ]);
   }, []);
 
   if (accounts === null) return <div>Loading...</div>;

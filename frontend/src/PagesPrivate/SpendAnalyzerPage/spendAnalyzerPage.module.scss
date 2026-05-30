@@ -1,0 +1,81 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    height: 100%;
+}
+
+.sidebarContainer {
+    background-color: lightblue;
+    height: 100%;
+    width: 20%;
+}
+
+.mainContainer {
+    width: 80%;
+}
+
+.categoryContainer, .merchantContainer, .transactionContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: green;
+    gap: 1rem;
+}
+
+.merchantTransactionContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.merchantContainer, .transactionContainer {
+    width: 50%;
+}
+
+.categoryHeaderContainer {
+    background-color: red;
+    height: auto;
+    width: 100%;
+}
+
+.categoryBodyContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex: 1;
+}
+
+.categoryGraphContainer {
+    background-color: blue;
+    height: 100%;
+    width: 40%;
+}
+
+.categoryTableContainer {
+    background-color: yellow;
+    height: 100%;
+    width: 60%;
+}
+
+.merchantContainer {
+background-color: aqua;
+}
+
+.merchantHeaderContainer {
+
+}
+
+.merchantBodyContainer {
+    
+}
+
+.transactionContainer {
+background-color: lightgray;
+}
+
+.transactionHeaderContainer {
+
+}
+
+.transactionBodyContainer {
+
+}

@@ -25,7 +25,7 @@ import AuthenticateAccount from "./PagesPrivate/AuthenticateAccountPage";
 import LoginPage from "./PagesPublic/LoginPage";
 import SignUpPage from "./PagesPublic/SignUpPage";
 import DashboardPage from "./PagesPrivate/DashboardPage";
-import SpendAnalyzerPage from "./PagesPrivate/SpendAnalyzerPage";
+import SpendAnalyzerPage from "./PagesPrivate/SpendAnalyzerPage/SpendAnalyzerPage";
 
 const App = () => {
 
