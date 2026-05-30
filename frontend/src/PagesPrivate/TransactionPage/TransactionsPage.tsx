@@ -11,9 +11,10 @@ $HISTORY:
 
 Jan-28-2026   Created initial file
 Feb-24-2026   Connected Filterbox to Transactions to send filter options selected
+May-29-2026   Fixed merchant and category dropdowns to accurately display options of current account(s)
 ------------------------------------------------------------------
 */
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Transactions from "./Transactions";
 import { TransactionFilterOptions, FilterBox } from "./FilterBox";
 
@@ -57,6 +58,17 @@ function TransactionsPage() {
     merchants: [],
   });
 
+  // Callback function to update the filter dropdown options for categories and merchants.
+  const handleFilterDropdownsChange = useCallback(
+    (c: string[], m: string[]) => {
+      setFilterDropdowns({
+        categories: c,
+        merchants: m,
+      });
+    },
+    []
+  );
+
   return (
     <>
       <h1>Transactions</h1>
@@ -72,12 +84,7 @@ function TransactionsPage() {
         </div>
         <div style={{ width: "80%" }}>
           <Transactions
-            setFilterDrowdowns={(c, m) => {
-              setFilterDropdowns((prev) => ({
-                categories: c,
-                merchants: m,
-              }));
-            }}
+            setFilterDrowdowns={handleFilterDropdownsChange}
             filterOptions={filterOptions}
           />
         </div>

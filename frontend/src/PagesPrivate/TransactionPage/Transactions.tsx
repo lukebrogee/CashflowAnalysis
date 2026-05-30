@@ -12,22 +12,26 @@ $HISTORY:
 Dec-24-2025   Created initial file.
 Dec-30-2025   Switched api call from /api/transactions to /api/all-transactions
 Feb-24-2026   Complete rewrite of component. Added css styling, updated pagination, added account tabs, updated columns
+May-29-2026   Fixed merchant and category dropdowns to accurately display options of current account(s). Added column
+              visibility dropdown to allow user to select which columns to show in the transactions table.
+              Added loading circle animation when transactions are being loaded.
 ------------------------------------------------------------------
 */
 
 /*
-Drop down for categories and merchants are coming from the previous account load
-sync transactions and initial load needs an icon for loading
 sync transactions seems to always load all transactions even with the cursor (May be normal in sandbox)
-Add filter to make columns visible/hidden
+Add/remove column dropdown:
+  - If the button is clicked or anywhere on the page is clicked ditch the changes and close the dropdown
+  - Add a select all and reset button possibly?
+  - Possibly make an sql table for this to save user preferences for column visibility?
 All transactions need the green border on page load
-Next and Previous buttons need to be enable/disabled dependant on if at the starting page or end page
-Add a sort option to add/remove columns, on page load transactions should be sorted by date
-Loading screen needs to be updated to display circular loading icon
+I notice on page load there is no border around All Transactions tab, needs to be there on load
 */
 
 import { useEffect, useMemo, useState } from "react";
 import { TransactionFilterOptions } from "./FilterBox";
+import {LoadingCircle} from "../../Components/CustomTags/LoadingCircle/index"
+import {DropDown} from "../../Components/CustomTags/DropDown/index"
 import styles from "./transactions.module.scss";
 
 interface Props {
@@ -85,6 +89,10 @@ function Transactions(p: Props) {
   const [merchantDropdown, setMerchantDropdown] = useState<string[]>([]);
   const [activeAccountDisplay, setActiveAccountDisplay] = useState<string>("");
   const [userInput, setUserInput] = useState(1);
+  const [columnVisibilityChange, setColumnVisibilityChange] = useState(false);
+  const columnNames = ["Date", "Description", "Amount", "Merchant", "Category"];
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(columnNames);
+
 
   //Loading and Error States
   const [loading, setLoading] = useState(true);
@@ -177,10 +185,9 @@ function Transactions(p: Props) {
   }, [p.filterOptions, allTransactions, activeAccountDisplay]);
 
   //Set the dropdowns for the filter box based on the transactions from the active account display
-  //Right now does not work on first page load and loads dropdown data from previous account display
   useEffect(() => {
     p.setFilterDrowdowns(categoryDropdown, merchantDropdown);
-  }, [activeAccountDisplay]);
+  }, [categoryDropdown, merchantDropdown, p.setFilterDrowdowns]);
 
   //Retrieves all transactions from the database associated with the user. Does not access Plaid API
   useEffect(() => {
@@ -224,7 +231,7 @@ function Transactions(p: Props) {
     }, [filteredTransactions, userInput]);
 
   //Need to update loading screen to display circular loading icon
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className={styles.loadingContainer}><LoadingCircle size={100} borderSize={7} /></div>;
 
   // Display table of transactions
   return (
@@ -248,37 +255,67 @@ function Transactions(p: Props) {
         ))}
       </div>
       <div className={styles.transactionsContainer}>
-        <p>
-          Showing {startIndex + 1} to {endIndex} of{" "}
-          {filteredTransactions.length} transactions
-        </p>
+        <div className={styles.headerControls}>
+          <div className={styles.transactionCountContainer}>
+            <p>
+              Showing {startIndex + 1} to {endIndex} of{" "}
+              {filteredTransactions.length} transactions
+            </p>
+          </div>
+
+          <div className={styles.rightControlGroup}>
+            <div className={styles.syncButtonContainer}>
+              <button className={styles.syncButton} onClick={syncTransactions}>
+                Sync Latest Transactions
+              </button>
+            </div>
+            <div className={styles.columnSettingsContainer}>
+              <DropDown
+                title="Add/Remove Columns"
+                options={columnNames}
+                selectedValues={(columns) => {
+                    setVisibleColumns(columns);
+                }}
+                onSelectionChange={(selectedColumns) => {
+                    setVisibleColumns(selectedColumns);
+                }}
+
+              />
+            </div>
+          </div>
+        </div>
+
         <table className="table">
           <thead className="sticky-top z-0">
             <tr>
-              <th scope="col">Date</th>
-              <th scope="col">Description</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Merchant</th>
-              <th scope="col">Category</th>
+              {columnNames.map((col) => {
+                if (visibleColumns.includes(col)){
+                  return <th scope="col" key={col}>{col}</th>
+                }
+              })}
             </tr>
           </thead>
           <tbody>
             {visibleTransactions.map((txn, index) => (
               <tr key={txn.TransactionID}>
-                <td>
-                  {" "}
-                  {new Date(txn.Date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
+                {visibleColumns.includes("Date") && (
+                  <td>
+                    {" "}
+                    {new Date(txn.Date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
                   })}
-                </td>
-                <td>{txn.Name}</td>
-                <td>{"$" + txn.Amount.toFixed(2)}</td>
-                <td>{txn.MerchantName}</td>
-                <td>
-                  <div className={styles.categoryCell}>{txn.Category}</div>
-                </td>
+                  </td>
+                )}
+                {visibleColumns.includes("Description") && <td>{txn.Name}</td>}
+                {visibleColumns.includes("Amount") && <td>{"$" + txn.Amount.toFixed(2)}</td>}
+                {visibleColumns.includes("Merchant") && <td>{txn.MerchantName}</td>}
+                {visibleColumns.includes("Category") && (
+                  <td>
+                    <div className={styles.categoryCell}>{txn.Category}</div>
+                  </td>
+                  )}
               </tr>
             ))}
           </tbody>
@@ -288,7 +325,11 @@ function Transactions(p: Props) {
           <button
             className={styles.previousButton}
             disabled={startIndex === 0}
+            style={{
+              background: startIndex === 0 ? "#ccc" : "#4caf50"
+            }}
             onClick={() => setUserInput(userInput - 1)}
+            
           >
             Previous
           </button>
@@ -296,12 +337,12 @@ function Transactions(p: Props) {
           <button
             className={styles.nextButton}
             disabled={endIndex >= filteredTransactions.length}
+            style={{
+              background: (endIndex >= filteredTransactions.length) ? "#ccc" : "#4caf50"
+            }}
             onClick={() => setUserInput(userInput + 1)}
           >
             Next
-          </button>
-          <button className={styles.syncButton} onClick={syncTransactions}>
-            Sync Latest Transactions
           </button>
         </div>
       </div>
