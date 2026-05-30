@@ -11,6 +11,13 @@
     }
 }
 
+.loadingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 .categoryCell {
     border-radius: 20px;
     background-color: #c8ffca;
@@ -46,6 +53,20 @@
     background-color: #4caf50;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
+}
+
+.headerControls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.rightControlGroup {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .tableControlsContainer {
