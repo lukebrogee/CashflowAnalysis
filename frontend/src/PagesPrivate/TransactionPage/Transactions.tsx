@@ -15,7 +15,8 @@ Feb-24-2026   Complete rewrite of component. Added css styling, updated paginati
 May-29-2026   Fixed merchant and category dropdowns to accurately display options of current account(s). Added column
               visibility dropdown to allow user to select which columns to show in the transactions table.
               Added loading circle animation when transactions are being loaded.
-------------------------------------------------------------------
+May-31-2026   Updated DropDown component due to updates in the DropDown component
+              ------------------------------------------------------------------
 */
 
 /*
@@ -31,7 +32,7 @@ I notice on page load there is no border around All Transactions tab, needs to b
 import { useEffect, useMemo, useState } from "react";
 import { TransactionFilterOptions } from "./FilterBox";
 import {LoadingCircle} from "../../Components/CustomTags/LoadingCircle/index"
-import {DropDown} from "../../Components/CustomTags/DropDown/index"
+import {DropDown, DropDownOption} from "../../Components/CustomTags/DropDown/index"
 import styles from "./transactions.module.scss";
 
 interface Props {
@@ -90,8 +91,14 @@ function Transactions(p: Props) {
   const [activeAccountDisplay, setActiveAccountDisplay] = useState<string>("");
   const [userInput, setUserInput] = useState(1);
   const [columnVisibilityChange, setColumnVisibilityChange] = useState(false);
-  const columnNames = ["Date", "Description", "Amount", "Merchant", "Category"];
-  const [visibleColumns, setVisibleColumns] = useState<string[]>(columnNames);
+  const columnNames: DropDownOption[] = [
+    { id: "Date", name: "Date" },
+    { id: "Description", name: "Description" },
+    { id: "Amount", name: "Amount" },
+    { id: "Merchant", name: "Merchant" },
+    { id: "Category", name: "Category" },
+  ];
+  const [visibleColumns, setVisibleColumns] = useState<string[]>(columnNames.map(c => c.id));
 
 
   //Loading and Error States
@@ -273,11 +280,9 @@ function Transactions(p: Props) {
               <DropDown
                 title="Add/Remove Columns"
                 options={columnNames}
-                selectedValues={(columns) => {
-                    setVisibleColumns(columns);
-                }}
+                setSelected={columnNames}
                 onSelectionChange={(selectedColumns) => {
-                    setVisibleColumns(selectedColumns);
+                  setVisibleColumns(selectedColumns.map(c => c.id));
                 }}
 
               />
@@ -289,16 +294,17 @@ function Transactions(p: Props) {
           <thead className="sticky-top z-0">
             <tr>
               {columnNames.map((col) => {
-                if (visibleColumns.includes(col)){
-                  return <th scope="col" key={col}>{col}</th>
+                if (visibleColumns.includes(col.id)){
+                  return <th scope="col" key={col.id}>{col.name}</th>
                 }
+                return null;
               })}
             </tr>
           </thead>
           <tbody>
             {visibleTransactions.map((txn, index) => (
               <tr key={txn.TransactionID}>
-                {visibleColumns.includes("Date") && (
+                {visibleColumns.includes(columnNames[0].id) && (
                   <td>
                     {" "}
                     {new Date(txn.Date).toLocaleDateString("en-US", {
@@ -308,10 +314,10 @@ function Transactions(p: Props) {
                   })}
                   </td>
                 )}
-                {visibleColumns.includes("Description") && <td>{txn.Name}</td>}
-                {visibleColumns.includes("Amount") && <td>{"$" + txn.Amount.toFixed(2)}</td>}
-                {visibleColumns.includes("Merchant") && <td>{txn.MerchantName}</td>}
-                {visibleColumns.includes("Category") && (
+                {visibleColumns.includes(columnNames[1].id) && <td>{txn.Name}</td>}
+                {visibleColumns.includes(columnNames[2].id) && <td>{"$" + txn.Amount.toFixed(2)}</td>}
+                {visibleColumns.includes(columnNames[3].id) && <td>{txn.MerchantName}</td>}
+                {visibleColumns.includes(columnNames[4].id) && (
                   <td>
                     <div className={styles.categoryCell}>{txn.Category}</div>
                   </td>

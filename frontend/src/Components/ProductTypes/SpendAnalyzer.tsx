@@ -1,50 +1,33 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     SpendAnalyzer.tsx
+PROJECT:       CashflowAnalysis
+Date Created:  May-31-2026
+--------------------------------------------------------------------
+DESCRIPTION:
+Component to analyze spending patterns and display them in a pie chart.
+--------------------------------------------------------------------
+$HISTORY:
+
+May-31-2026   Created initial file.
+------------------------------------------------------------------
+*/
+
+
 import React, { useContext, useEffect, useState } from "react";
 import { PieChart } from '@mui/x-charts/PieChart';  //https://mui.com/x/react-charts/pie/
+import { labelMarkClasses } from '@mui/x-charts/ChartsLabel'
 
 interface Props {
-  account_id: string;
-  name: string;
-  official_name: string;
-  subtype: string;
-  type: string;
-  balances: {available: number, current: number, iso_currency:string};
-}
+  accounts: {
+    name: string;
+    value: number;
+  }[];
+};
 
 
-function SpendAnalyzer() {
-  const [accounts, setAccounts] = useState<Props[]>([]);
 
-  useEffect(() => {
-    setAccounts([
-      {
-        account_id: "123",
-        name: "Chase Checking",
-        official_name: "Chase Total Checking",
-        subtype: "checking",
-        type: "depository",
-        balances: {
-          available: 1000,
-          current: 1000,
-          iso_currency: "USD",
-        },
-      },
-      {
-        account_id: "456",
-        name: "Chase Credit Card",
-        official_name: "Chase Freedom Unlimited",
-        subtype: "credit card",
-        type: "credit",
-        balances: {
-          available: 5000,
-          current: 2000,
-          iso_currency: "USD", 
-        },
-      },
-    ]);
-  }, []);
-
-  if (accounts === null) return <div>Loading...</div>;
-
+function SpendAnalyzer({ accounts }: Props) {
 
   return (
 <PieChart
@@ -52,13 +35,25 @@ function SpendAnalyzer() {
     {
       data: 
         accounts.map((act, index) => (
-          { id: act.account_id, value: act.balances.current, label: act.name }
+          { value: act.value, label: act.name }
         ))
       ,
     },
   ]}
-  width={275}
-  height={275}
+  width={400}
+  height={400}
+  slotProps={{
+        legend: {
+          position: {
+            vertical: 'middle',
+            horizontal: 'center',
+          },
+          sx: {
+            fontSize: 14,
+            color: '#ffffff',
+          },
+        },
+      }}
 />
   );
 }

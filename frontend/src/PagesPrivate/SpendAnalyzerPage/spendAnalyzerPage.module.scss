@@ -6,7 +6,6 @@
 }
 
 .sidebarContainer {
-    background-color: lightblue;
     height: 100%;
     width: 20%;
 }
@@ -15,67 +14,123 @@
     width: 80%;
 }
 
-.categoryContainer, .merchantContainer, .transactionContainer {
+.addAccountButton {
+      padding: 0.5rem 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  min-width: 220px;
+}
+
+/* Top-level column containers */
+.categoryContainer,
+.merchantContainer,
+.transactionContainer {
     display: flex;
     flex-direction: column;
-    background-color: green;
     gap: 1rem;
 }
 
 .merchantTransactionContainer {
     display: flex;
-    flex-direction: row;
+    gap: 1rem;
 }
 
-.merchantContainer, .transactionContainer {
+.merchantContainer,
+.transactionContainer {
     width: 50%;
 }
 
-.categoryHeaderContainer {
-    background-color: red;
-    height: auto;
-    width: 100%;
+.categoryHeaderContainer,
+.merchantHeaderContainer,
+.transactionHeaderContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
 }
 
 .categoryBodyContainer {
     display: flex;
-    flex-direction: row;
     gap: 1rem;
     flex: 1;
 }
 
 .categoryGraphContainer {
-    background-color: blue;
-    height: 100%;
     width: 40%;
+    background-color: #1500b6;
+    border-radius: 8px;
 }
 
 .categoryTableContainer {
-    background-color: yellow;
-    height: 100%;
     width: 60%;
 }
 
-.merchantContainer {
-background-color: aqua;
+/* Panel base */
+.panelHeader {
+    font-weight: 700;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
 }
 
-.merchantHeaderContainer {
-
+.panelTable {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
-.merchantBodyContainer {
-    
+/* Category theme - yellow */
+.categoryTableContainer .panelHeader {
+    background: linear-gradient(90deg, #fff7c2, #fff3a8);
+    color: #6b4a00;
 }
-
-.transactionContainer {
-background-color: lightgray;
+.categoryTableContainer .panelTable thead th {
+    background: #ffef9e;
+    color: #6b4a00;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
 }
-
-.transactionHeaderContainer {
-
+.categoryTableContainer .panelTable tbody tr:nth-child(odd) {
+    background: #fffdf0;
 }
-
-.transactionBodyContainer {
-
+.categoryTableContainer .panelTable tbody tr:nth-child(even) {
+    background: #fff9df;
 }
+.categoryTableContainer .panelTable td { padding: 0.6rem 0.8rem; }
+
+/* Merchant theme - baby blue */
+.merchantContainer .panelHeader {
+    background: linear-gradient(90deg, #e6f7ff, #dff3ff);
+    color: #034f84;
+}
+.merchantContainer .panelTable thead th {
+    background: #d7f0ff;
+    color: #034f84;
+    padding: 0.6rem 0.8rem;
+}
+.merchantContainer .panelTable tbody tr:nth-child(odd) { background: #f7fdff; }
+.merchantContainer .panelTable tbody tr:nth-child(even) { background: #eefcff; }
+.merchantContainer .panelTable td { padding: 0.6rem 0.8rem; }
+
+/* Transaction theme - purple */
+.transactionContainer .panelHeader {
+    background: linear-gradient(90deg, #f3e8ff, #eddcff);
+    color: #4a235a;
+}
+.transactionContainer .panelTable thead th {
+    background: #ecd9ff;
+    color: #4a235a;
+    padding: 0.6rem 0.8rem;
+}
+.transactionContainer .panelTable tbody tr:nth-child(odd) { background: #fbf7fd; }
+.transactionContainer .panelTable tbody tr:nth-child(even) { background: #f6f0fb; }
+.transactionContainer .panelTable td { padding: 0.6rem 0.8rem; }
+
+/* General card styling */
+.panelTable, .panelHeader { border-radius: 8px; }
+
+.panelTable thead th { font-weight: 700; }
+
+.panelTable tbody tr td { border-bottom: 1px solid rgba(66, 32, 32, 0.04); }

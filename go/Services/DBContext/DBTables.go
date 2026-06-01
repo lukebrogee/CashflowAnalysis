@@ -18,6 +18,7 @@ Jan-28-2026   Added DB_WidgetBoard{}, DB_WidgetBoardRows{}, DB_Widgets{}, DB_Wid
 -             Also added `db` tags to all structs for mapping purposes
 Feb-24-2026   Added DB_AccountTransactions{} and updated DB_LinkedInstitutions{} to include CursorID for transaction syncing.
 -             Updated DB_LinkedAccounts{} to include PlaidAccountID
+May-31-2026   Added DB_WorkspaceHub{} and DB_WorkspaceHub_LinkedAccounts{}
 ------------------------------------------------------------------
 */
 package services
@@ -130,4 +131,19 @@ type DB_WidgetLinkedAccounts struct {
 	WidgetID        int       `db:"WidgetID"`
 	LinkedAccountID int       `db:"LinkedAccountID"`
 	CreatedAt       time.Time `db:"CreatedAt"`
+}
+
+type DB_WorkspaceHub struct {
+	WorkspaceHubID int       `db:"id"`
+	UserID         int       `db:"UserID"`
+	Name           string    `db:"Name"`
+	CreatedAt      time.Time `db:"CreatedAt"`
+	UpdatedAt      time.Time `db:"UpdatedAt"`
+}
+
+type DB_WorkspaceHub_LinkedAccounts struct {
+	LinkedAccountsID int       `db:"id"`
+	WorkspaceHubID   int       `db:"WorkspaceHubID"`
+	AccountID        int       `db:"AccountID"`
+	AddedAt          time.Time `db:"AddedAt"`
 }
