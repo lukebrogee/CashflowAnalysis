@@ -18,7 +18,7 @@ Jan-06-2025   Added /api/SaveWidgetAccount/ with SaveWidgetAccount()
 Jan-28-2026   Moved all api methods to seperate files under the same package main
 Feb-24-2026   Added /api/syncTransactions/ and /api/retrieveAllTransactions/. Removed /api/all-transactions/
 -             Added services.InitializeDB() to init() to ensure only one connection pool is created
-
+May-31-2026   Added workspace hub related api calls and methods
 ------------------------------------------------------------------
 */
 package main
@@ -79,6 +79,15 @@ func main() {
 	r.POST("/api/AddRowToWidgetBoard", AddRowToWidgetBoard)
 	r.POST("/api/DeleteRowToWidgetBoard", DeleteRowToWidgetBoard)
 	r.GET("/api/retrieveWidgets", RetrieveWidgets)
+
+	//Workspace Hub Calls
+	r.POST("/api/SaveWorkspaceHub", SaveWorkspaceHub)
+	r.POST("/api/RenameWorkspaceHub", RenameWorkspaceHub)
+	r.POST("/api/DeleteWorkspaceHub", DeleteWorkspaceHub)
+	r.POST("/api/AddAccountToWorkspaceHub", AddAccountToWorkspaceHub)
+	r.POST("/api/RemoveAccountsFromWorkspaceHub", RemoveAccountsFromWorkspaceHub)
+	r.GET("/api/RetrieveWorkspaceList", RetrieveWorkspaceList)
+	r.POST("/api/RetrieveWorkspaceHub", RetrieveWorkspaceHub)
 
 	err := r.Run(":" + APP_PORT)
 	if err != nil {

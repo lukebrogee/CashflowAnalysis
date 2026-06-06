@@ -1,0 +1,149 @@
+.AccountButton, .AccountButtonClicked {
+    border: 2px solid grey;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+    .AccountButton:hover {
+        background-color: #1ECD97;
+    }
+
+    .AccountButtonClicked {
+        background-color: #1ECD97;
+    }
+
+.AccountName {
+    font-size: 20px;
+}
+
+.MaskID, .AddedAt {
+    font-size: 14px;
+}
+
+.popupPositioning {
+    position: fixed;   
+    inset: 0;               
+    z-index: 9999;            
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(247, 247, 247, 0.8);
+}
+
+.AccountScreenTop {
+    justify-items: center;
+    height: auto;
+    padding-bottom: 10px;
+}
+
+    .AccountScreenTop h1 {
+        font-size:xx-large;
+    }
+    .AccountScreenTop hr {
+        border: none;
+        height: 1px;
+        background-color: grey;
+    }
+
+.AccountScrollBox {
+    overflow-y: auto;
+    height: 100%;
+}
+
+    .AccountScrollBox::-webkit-scrollbar {
+        display: none;
+    }
+
+.SubmitBox {
+    margin-top: 10px;
+    justify-items: center;
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 60px;
+  aspect-ratio: 4;
+  background: radial-gradient(circle closest-side,#000 90%,#0000) 0/calc(100%/3) 100% space;
+  clip-path: inset(0 100% 0 0);
+  animation: l1 1s steps(4) infinite;
+  align-items: center;
+}
+@keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
+
+.loadingScreen, .errorScreen, .noAccountsScreen {
+    height: 100%;
+    width: 100%;
+    justify-items: center;
+    align-content: center;
+}
+
+.errorScreen h1, .noAccountsScreen h1 {
+    font-size: 20px;
+    padding-top: 10px;
+    text-align: center;
+}
+
+.closexButtonDiv {
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  cursor: pointer;
+}
+
+.errorMessageBox {
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: red;
+}
+
+.ChooseWidgetScreen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    gap: 10px;
+    padding-bottom: 20px;
+}
+
+    .ChooseWidgetScreen h1 {
+        font-size: 40px;
+    }
+
+.ChooseWidgetScroll {
+  overflow-y: auto;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column; 
+  align-items: center;    
+  gap: 12px;              
+}
+
+.ChooseWidgetScroll::-webkit-scrollbar {
+  display: none;
+}
+
+.widgetButton {
+  width: 80%;
+  height: 50px;
+
+  border: 2px solid grey;
+  border-radius: 8px;
+  background-color: rgba(255,255,255, 0.8);
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+    .widgetButton h1 {
+        font-size: 20px;
+    }
+
+    .widgetButton:hover {
+        background-color: #1ECD97;
+    }
