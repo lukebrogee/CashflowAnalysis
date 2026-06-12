@@ -1,0 +1,269 @@
+$threads-font-path: "~plaid-threads/fonts";
+@import "~plaid-threads/scss/typography";
+@import "~plaid-threads/scss/variables";
+
+* {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.headerContainer h1 {
+  font-size: 2.9rem;
+  line-height: 1.05;
+  margin: 0;
+  color: #0b1226;
+  font-weight: 800;
+}
+.headerContainer p {
+  color: #757575; /* slightly grey */
+  font-size: 1rem;
+  margin: 0;
+}
+
+.explanationContainer {
+  color: #000; /* black font */
+  font-size: 1.1rem; /* a little bigger than headerContainer <p> */
+  margin-bottom: 1.25rem;
+}
+.explanationContainer h2 {
+  margin: 0 0 0.4rem 0;
+  font-size: 1.4rem;
+}
+.explanationContainer p {
+  color: #757575; /* same as headerContainer <p> */
+  font-size: 1rem;
+  margin: 0.25rem 0 0 0;
+}
+
+.accountTypeContainer {
+  display: flex;
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.accountBox {
+  flex: 1 1 0;
+  border: 1px solid #e0e0e0; /* thin grey border */
+  border-radius: 12px; /* rounded edges */
+  padding: 1.75rem 1.5rem;
+  margin: 0.75rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  background: #fff;
+}
+.accountTitle {
+  margin: 0.5rem 0 0 0;
+  font-size: 1.25rem;
+}
+.accountBox p {
+  color: #757575; /* same as other page paragraphs */
+  font-size: 1rem;
+  margin-top: 0.75rem;
+}
+.accountTypeContainer > .accountBox:nth-child(1) {
+  background: rgba(46, 125, 50, 0.08);
+}
+.accountTypeContainer > .accountBox:nth-child(2) {
+  background: rgba(21, 101, 192, 0.08);
+}
+.accountTypeContainer > .accountBox:nth-child(3) {
+  background: rgba(106, 27, 154, 0.08);
+}
+
+/* Colors for each box: bank (green), credit (blue), investment (purple) */
+.accountTypeContainer > div:nth-child(1) h1,
+.accountTypeContainer > div:nth-child(1) h1,
+.accountTypeContainer > .accountBox:nth-child(1) .accountImage {
+  color: #2e7d32; /* green */
+}
+.accountTypeContainer > div:nth-child(2) h1,
+.accountTypeContainer > .accountBox:nth-child(2) .accountImage {
+  color: #1565c0; /* blue */
+}
+.accountTypeContainer > div:nth-child(3) h1,
+.accountTypeContainer > .accountBox:nth-child(3) .accountImage {
+  color: #6a1b9a; /* purple */
+}
+
+.accountHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.accountImage {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: inherit;
+}
+
+.primaryButton {
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2e7d32 0%, #1565c0 100%);
+  color: #ffffff;
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  box-shadow: 0 12px 24px rgba(15, 44, 79, 0.12);
+}
+.primaryButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 30px rgba(15, 44, 79, 0.18);
+}
+.primaryButton:active {
+  transform: translateY(0);
+  opacity: 0.95;
+}
+.primaryButton:focus-visible {
+  outline: 3px solid rgba(21, 101, 192, 0.35);
+  outline-offset: 3px;
+}
+
+.plaidInfoContainer {
+    justify-content: center;
+    align-items: center;
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.25rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}
+.plaidInfoContainer > div {
+  color: #bdbdbd; /* faint grey for lock image */
+}
+.plaidInfoContainer p {
+  color: #bdbdbd; /* faint grey paragraph */
+  margin: 0;
+  font-size: 0.95rem;
+}
+.plaidInfoContainer a {
+  color: #444444; /* darker and more visible */
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* Small responsive tweak */
+@media (max-width: 720px) {
+  .accountTypeContainer {
+    flex-direction: column;
+  }
+}
+
+/* How it works */
+.howItWorksContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  margin-top: 2.5rem;
+}
+.howItWorksTitle {
+  color: #000;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0;
+}
+.howItWorksGrid {
+  display: flex;
+  gap: 2.5rem;
+  margin-top: 1.25rem;
+}
+.howItem {
+  flex: 1 1 0;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+.howItemImage {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 8px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: inherit;
+}
+.howItem:nth-child(1) .howItemImage {
+  color: #2e7d32; /* green - Secure */
+}
+.howItem:nth-child(2) .howItemImage {
+  color: #1565c0; /* blue - Private */
+}
+.howItem:nth-child(3) .howItemImage {
+  color: #6a1b9a; /* purple - Fast */
+}
+.howItemContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.howItemTitle {
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+.howItemText {
+  color: #757575;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* App container placeholders (scoped) */
+.contentWrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+.App {
+  padding: 1rem 0;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Refinements to match requirements */
+.headerContainer h1 {
+  font-weight: 700;
+}
+
+.accountTypeContainer > div > div > div {
+  font-weight: 600; /* make the 'Image' text visually prominent */
+  margin-bottom: 0.35rem;
+}
+
+.plaidInfoContainer > div {
+  color: #bdbdbd; /* faint grey for lock image */
+  opacity: 0.8;
+}
+.plaidInfoContainer p {
+  color: #bdbdbd; /* faint grey paragraph */
+  opacity: 0.95;
+}
+.plaidInfoContainer a {
+  color: #333333; /* darker and more visible */
+  text-decoration: underline;
+  font-weight: 700;
+}

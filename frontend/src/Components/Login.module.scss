@@ -1,0 +1,38 @@
+.loginForm {
+    background-color: lightgray;
+    height: 500px;
+    max-width: 500px;
+    margin-top: 70px;
+    padding-left: 50px;
+    padding-top: 50px;
+    padding-right: 50px;
+}
+
+.loginLogo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns with equal width */
+    gap: 10px; /* Adjust the gap between columns */
+    justify-content: center;
+}
+
+.loginTextBox {
+    height: auto;
+    width: 100%;
+    border: none;
+    border-bottom: 2px solid #808080;
+    outline: none;
+}
+
+.loginSubmitBox {
+    width: 100%;
+    height: 50px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 25px;
+    margin-bottom: 25px;
+}

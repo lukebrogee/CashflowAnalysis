@@ -12,6 +12,7 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added <BrowserRouter> tag
+Jun-11-2025   Added global.scss
 ------------------------------------------------------------------
 */
 import React from "react";
@@ -22,6 +23,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter} from "react-router-dom";
 
 import { AuthProvider } from "./Auth/AuthContext";
+import "./global.scss";
 const container = document.getElementById("root") as HTMLElement;
 if (!container) throw new Error("Root container not found");
 

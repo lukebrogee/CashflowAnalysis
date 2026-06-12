@@ -1,3 +1,17 @@
+/*
+------------------------------------------------------------------
+FILE NAME:     AuthenticateAccountPage.tsx
+PROJECT:       MoneyLens
+Date Created:  Jun-11-2026
+--------------------------------------------------------------------
+DESCRIPTION:
+
+--------------------------------------------------------------------
+$HISTORY:
+
+Jun-11-2026   Created initial file.
+------------------------------------------------------------------
+*/
 import React, { useContext, useEffect, useRef } from "react";
 import Callout from "plaid-threads/Callout";
 import Button from "plaid-threads/Button";
@@ -47,8 +61,6 @@ const Header = ({ onVerificationComplete }: Props) => {
 
   return (
     <div className={styles.grid}>
-      <h3 className={styles.title}>Plaid Quickstart</h3>
-
       {!linkSuccess ? (
         <>
           {/* message if backend is not running and there is no link token */}

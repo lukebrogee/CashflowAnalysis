@@ -11,10 +11,13 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added password to login form and authentication
+Jun-11-2025   Updated UI Design
 ------------------------------------------------------------------
 */
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./Login.module.scss";
+import logoImage from "../images/logos/MoneyLensLogo_Square_BackgroundColor_Motto.png";
 
 
 function LoginComponent() {
@@ -48,22 +51,31 @@ function LoginComponent() {
     }
 
     return (
-        <div>
-            <h1>Login Component</h1>
-            <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                <label>
-                    Username:
-                    <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-                </label>
-                <label>
-                    Password:
-                    <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                </label>
-                <br />
-                <button type="submit">Login</button>
-            </form>
-        </div>
-    )
+        <div className={styles.loginContainer}>
+            <div className={styles.loginLogo}>
+                <img src={logoImage} alt="MoneyLens Logo" className={styles.loginLogoImg} style={{ width: "550px", height: "auto", paddingBottom: "15px" }} />
+            </div>
+
+            <div className={styles.loginForm}>
+                <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
+                    <h1 className={styles.loginFormHeader}>Log in</h1>
+
+                    <label className={styles.loginFormsFont}/>Username<br/>
+                    <input className={styles.loginTextBox} type="text" name="Email" value={username} onChange={(e) => setUsername(e.target.value)}/><br/>
+
+                    <label className={styles.loginFormFont}>Password</label><br/>
+                    <input className={styles.loginTextBox} type="password" name="Password" value={password} onChange={(e) => setPassword(e.target.value)}/><br/><br/>
+
+                    <div>
+                        <p><a asp-action="SignUp" >Don't have an account? Sign up</a></p>
+                    </div>
+                    <div style={{ paddingTop: "15px" }}>
+                        <input className={styles.loginSubmitBox} id="createLogin" type="submit" value="Log in"/>
+                    </div>
+                </form>
+            </div>
+        </div>       
+    );
 }
 
 export default LoginComponent;

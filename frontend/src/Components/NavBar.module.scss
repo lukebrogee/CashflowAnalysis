@@ -1,0 +1,157 @@
+.container {
+    max-height: 60px;
+    position: fixed;
+    top: 0;
+    background: #ffffff;
+    width: 100%;
+    border-bottom: 1px solid #e0e0e0;
+    z-index: 1000;
+}
+
+.inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+}
+
+.brand {
+    height: 30px;
+}
+
+.toggler {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    padding: 4px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.togglerBar {
+    display: block;
+    height: 2px;
+    background: #212529;
+    border-radius: 2px;
+}
+
+.collapse {
+    width: 100%;
+}
+
+.show {
+    display: block;
+}
+
+.navList {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navItem {
+    display: block;
+}
+
+.navLink {
+        color: #212529;
+        padding: 0.5rem 0.75rem;
+        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+}
+
+.navLink:hover,
+.navLink:focus {
+        color: #4caf50;
+        background-color: rgba(0, 0, 0, 0.05);
+        text-decoration: none;
+}
+
+.activeNavLink {
+        color: #4caf50;
+        border-bottom: 2px solid #4caf50;
+}
+
+.spacer {
+    margin-left: auto;
+}
+
+.logoutButton {
+        border: none;
+        background: transparent;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+}
+
+.logoutText {
+    margin-left: 0.5rem;
+}
+
+/* Responsive behavior: collapse into column on small screens */
+@media (max-width: 991.98px) {
+    .inner {
+        align-items: center;
+    }
+    .navList {
+        flex-direction: column;
+        gap: 0.25rem;
+        margin-top: 0.5rem;
+    }
+    .spacer {
+        margin-left: 0;
+    }
+    .collapse {
+        display: none;
+    }
+    .show {
+        display: block;
+    }
+}
+
+.navLink {
+    color: #212529;
+    padding: 0.5rem 0.75rem;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.navLink:hover,
+.navLink:focus {
+    color: #4caf50;
+    background-color: rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    border-bottom: 2px solid #4caf50;
+}
+
+.activeNavLink {
+    color: #4caf50;
+    border-bottom: 2px solid #4caf50;
+}
+
+.logoutButton {
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    right: 0;
+    border-radius: 6px;
+    border: 1px solid #4caf50;
+    transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+    padding: 0.5rem 1.5rem;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4caf50;
+}
+
+.logoutButton:hover {
+    color: #ffffff;
+    background-color: #4caf50;
+    border-color: #4caf50;
+}

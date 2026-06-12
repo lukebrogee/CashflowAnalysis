@@ -11,6 +11,7 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Dec-30-2025   Added auth to bring username to the backend
+Jun-11-2025   Updated name of button
 ------------------------------------------------------------------
 */
 import React, { useEffect, useContext } from "react";
@@ -97,7 +98,7 @@ const Link = () => {
 
   return (
     <Button type="button" large onClick={() => open()} disabled={!ready}>
-      Launch Link
+      Connect an Account
     </Button>
   );
 };
