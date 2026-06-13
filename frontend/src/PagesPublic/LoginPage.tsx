@@ -10,15 +10,16 @@ DESCRIPTION:
 $HISTORY:
 
 Dec-24-2025   Created initial file.
+Jun-13-2026   Updated log in component path
 ------------------------------------------------------------------
 */
 import React from "react";
-import Login from "../Components/Login";
+import {LoginComponent} from "../Components/PageUtilities/Public/LoginPage_Utils";
 
 function LoginPage () {
     return (
         <>
-          <Login />     
+          <LoginComponent />     
         </>
     )
 }

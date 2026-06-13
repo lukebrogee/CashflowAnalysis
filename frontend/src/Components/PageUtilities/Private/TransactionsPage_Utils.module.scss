@@ -1,3 +1,67 @@
+.filterBox {
+    padding: 2rem;
+    ::shadow .options {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        border: 1ps solid #ccc;
+        padding: 1rem;
+        border-radius: 4px;
+    }
+}
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.row {
+    //stack label and input vertically and add some gap between them
+    flex-direction: column;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.row input, select {
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+.filterButtons {
+    padding-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.resetButton {
+    background: #ccc;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 40%;
+}
+
+.resetButton:hover {
+    background: #f44336;
+}
+
+.applyButton {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 60%;
+}
+
 
 .transactionsContainer {
     padding: 1rem;

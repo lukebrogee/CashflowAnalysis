@@ -11,17 +11,18 @@ $HISTORY:
 
 Dec-24-2025   Created initial file.
 Jun-11-2025   Updated UI of page. Moved to own folder AuthenticateAccountPage
+Jun-13-2026   Changed location of file
 ------------------------------------------------------------------
 */
 import React, { useEffect, useContext, useCallback, useState } from "react";
 
-import Header from "../../Components/Headers";
-import Products from "../../Components/ProductTypes/Products";
-import Items from "../../Components/ProductTypes/Items";
-import Context from "../../Context";
+import Header from "../Components/Headers";
+import Products from "../Components/ProductTypes/Products";
+import Items from "../Components/ProductTypes/Items";
+import Context from "../Context";
 import {BsCreditCard, BsLightningCharge } from "react-icons/bs";
 import {FaUniversity, FaChartLine, FaLock, FaShieldAlt} from "react-icons/fa";
-import logoImage from "../../images/logos/MoneyLensLogo_Long_Color.png";
+import logoImage from "../images/logos/MoneyLensLogo_Long_Color.png";
 import styles from "./AuthenticateAccountPage.module.scss";
 import { Products as PlaidProducts } from "plaid";
 

@@ -12,11 +12,11 @@ $HISTORY:
 Jan-28-2026   Created initial file
 Feb-24-2026   Connected Filterbox to Transactions to send filter options selected
 May-29-2026   Fixed merchant and category dropdowns to accurately display options of current account(s)
+Jun-13-2026   Changed location of file
 ------------------------------------------------------------------
 */
 import React, { useState, useCallback } from "react";
-import Transactions from "./Transactions";
-import { TransactionFilterOptions, FilterBox } from "./FilterBox";
+import { Transactions,TransactionFilterOptions, FilterBox } from "../Components/PageUtilities/Private/TransactionsPage_Utils";
 
 /*
 Components Needed

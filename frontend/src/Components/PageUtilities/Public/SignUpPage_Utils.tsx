@@ -1,32 +1,29 @@
 /*
 ------------------------------------------------------------------
-FILE NAME:     Login.tsx
-PROJECT:       CashflowAnalysis
-Date Created:  Dec-24-2025
+FILE NAME:     SignUpPage_Utils.tsx
+PROJECT:       MoneyLens
+Date Created:  Jun-13-2026
 --------------------------------------------------------------------
 DESCRIPTION:
-Component for user to login with credentials. Authorizes user on login.
+
 --------------------------------------------------------------------
 $HISTORY:
 
-Dec-24-2025   Created initial file.
-Dec-30-2025   Added password to login form and authentication
-Jun-11-2025   Updated UI Design
+Jun-13-2026   Created initial file.
 ------------------------------------------------------------------
 */
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import styles from "./Login.module.scss";
-import logoImage from "../images/logos/MoneyLensLogo_Square_BackgroundColor_Motto.png";
+import logoImage from "../../../images/logos/MoneyLensLogo_Square_BackgroundColor_Motto.png";
+import styles from "./SignUpPage_Utils.module.scss";
 
-
-function LoginComponent() {
+export const SignUpComponent = () => {
       const navigate = useNavigate();
     const [username, setUsername] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const handleLogin = () => {
-        // Implement your login logic here
-        fetch(`/api/login/`, { 
+    const handleSignUp = () => {
+        fetch(`/api/signup/`, { 
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -39,14 +36,14 @@ function LoginComponent() {
         })
             .then(response => {
                 if (response.ok) {
-                    console.log("Login successful");
+                    console.log("signup successful");
                     navigate("/dashboard"); 
                 } else {
-                    console.log("Login failed");
+                    console.log("signup failed");
                 }
             })
             .catch(error => {
-                console.error("Error during login:", error);
+                console.error("Error during signup:", error);
             });
     }
 
@@ -57,8 +54,8 @@ function LoginComponent() {
             </div>
 
             <div className={styles.loginForm}>
-                <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
-                    <h1 className={styles.loginFormHeader}>Log in</h1>
+                <form onSubmit={(e) => { e.preventDefault(); handleSignUp(); }}>
+                    <h1 className={styles.loginFormHeader}>Sign Up</h1>
 
                     <label className={styles.loginFormsFont}/>Username<br/>
                     <input className={styles.loginTextBox} type="text" name="Email" value={username} onChange={(e) => setUsername(e.target.value)}/><br/>
@@ -67,15 +64,13 @@ function LoginComponent() {
                     <input className={styles.loginTextBox} type="password" name="Password" value={password} onChange={(e) => setPassword(e.target.value)}/><br/><br/>
 
                     <div>
-                        <p><a asp-action="SignUp" >Don't have an account? Sign up</a></p>
+                        <p><a asp-action="SignUp" >Have an account? Log in</a></p>
                     </div>
                     <div style={{ paddingTop: "15px" }}>
-                        <input className={styles.loginSubmitBox} id="createLogin" type="submit" value="Log in"/>
+                        <input className={styles.loginSubmitBox} type="submit" value="Sign Up"/>
                     </div>
                 </form>
             </div>
         </div>       
     );
 }
-
-export default LoginComponent;

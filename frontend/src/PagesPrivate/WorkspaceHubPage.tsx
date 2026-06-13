@@ -1,16 +1,15 @@
 /*
 ------------------------------------------------------------------
-FILE NAME:     SpendAnalyzerPage.tsx
-PROJECT:       CashflowAnalysis
-Date Created:  Jan-28-2025
+FILE NAME:     WorkspaceHubPage.tsx
+PROJECT:       MoneyLens
+Date Created:  Jun-13-2026
 --------------------------------------------------------------------
 DESCRIPTION:
 
 --------------------------------------------------------------------
 $HISTORY:
 
-Jan-28-2026   Created initial file
-May-31-2026   Updated UI interface and added api calls to fetch and display data for spending analysis
+Jun-13-2026   Created initial file.
 ------------------------------------------------------------------
 */
 
@@ -42,12 +41,10 @@ Business Expenses: Shipping, advertising, and computer softwar
 */
 
 import React, { useState, useEffect } from "react";
-import {SelectBox,LoadedWorkspace } from "./SelectBox";
-import {FilterBox} from "./FilterBox";
-import SpendAnalyzer from "../../Components/ProductTypes/SpendAnalyzer";
-import styles from "./spendAnalyzerPage.module.scss";
-import { SelectAccountScreen } from "./SelectAccount";
-import {DropDown, DropDownOption} from "../../Components/CustomTags/DropDown";
+import {SelectBox,LoadedWorkspace, FilterBox, SelectAccountScreen } from "../Components/PageUtilities/Private/WorkspaceHub_Utils";
+import SpendAnalyzer from "../Components/ProductTypes/SpendAnalyzer";
+import styles from "./WorkspaceHubPage.module.scss";
+import {DropDown, DropDownOption} from "../Components/CustomTags/DropDown";
 
 interface CategoryData {
     category: string;
@@ -66,7 +63,7 @@ interface TransactionData {
 }
 
 
-function SpendAnalyzerPage () {
+function WorkspaceHubPage () {
 
     const [topCategories, setTopCategories] = useState<CategoryData[]>([]);
     const [topMerchants, setTopMerchants] = useState<MerchantData[]>([]);
@@ -334,4 +331,4 @@ function SpendAnalyzerPage () {
     )
 }
 
-export default SpendAnalyzerPage;
+export default WorkspaceHubPage;

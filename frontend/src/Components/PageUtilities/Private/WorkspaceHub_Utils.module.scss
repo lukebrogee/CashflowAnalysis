@@ -147,3 +147,116 @@
     .widgetButton:hover {
         background-color: #1ECD97;
     }
+
+.selectBoxContainer {
+  width: 100%;
+  max-width: 540px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.workspaceList {
+    min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.workspaceList::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.workspaceRow,
+.addWorkspaceRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: #fafafa;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.workspaceRow:hover,
+.addWorkspaceRow:hover {
+  background: #f3f4f6;
+}
+
+.workspaceName {
+  flex: 1;
+  color: #111827;
+  font-size: 01.5rem;
+}
+
+.workspaceAction {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.menuButton {
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.menuDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  min-width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  z-index: 10;
+}
+
+.menuItem {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #111827;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.menuItem:hover {
+  background: #f3f4f6;
+}
+
+.addIcon {
+  margin-right: 0.75rem;
+  font-size: 1.2rem;
+  color: #2563eb;
+}

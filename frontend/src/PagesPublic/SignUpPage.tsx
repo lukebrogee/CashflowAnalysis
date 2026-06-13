@@ -10,15 +10,16 @@ DESCRIPTION:
 $HISTORY:
 
 Dec-24-2025   Created initial file.
+Jun-13-2026   Updated sign up component path
 ------------------------------------------------------------------
 */
 import React from "react";
-import SignUp from "../Components/SignUp";
+import {SignUpComponent} from "../Components/PageUtilities/Public/SignUpPage_Utils";
 
 function SignUpPage () {
     return (
         <>
-          <SignUp />
+          <SignUpComponent />
         </>
     )
 }

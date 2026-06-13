@@ -1,24 +1,22 @@
 /*
 ------------------------------------------------------------------
-FILE NAME:     WidgetBoard.tsx
-PROJECT:       CashflowAnalysis
-Date Created:  Dec-24-2025
+FILE NAME:     DashboardPage_Utils.tsx
+PROJECT:       MoneyLens
+Date Created:  Jun-13-2026
 --------------------------------------------------------------------
 DESCRIPTION:
-Widget Board designed to hold graphic components holding data from user accounts
+
 --------------------------------------------------------------------
 $HISTORY:
 
-Dec-24-2025   Created initial file.
-Dec-30-2025   Disabled Widget Board features do to bugs
-Jan-28-2026   Created new widget board design giving users ability to add/remove rows and widgets
-              with three different row types and three different widget sizes.
+Jun-13-2026   Created initial file.
 ------------------------------------------------------------------
 */
+
 import React, {useRef, useEffect, useState} from "react";
-import styles from "./ComponentsCSS/widgetBoard.module.scss"
-import { Widget, WidgetData } from "./ProductTypes/Widget";
-import { CloseXButton } from "./CustomTags/Buttons/CloseXButton";
+import styles from "./DashboardPage_Utils.module.scss"
+import { Widget, WidgetData } from "../../ProductTypes/Widget";
+import { CloseXButton } from "../../CustomTags/Buttons/CloseXButton";
 
 
 //Interface for Singular Widget Board Data
@@ -38,7 +36,7 @@ interface WidgetBoardRows {
 }
 
 
-function WidgetBoard() {
+export const WidgetBoard = () => {
     //Loading state for Widget Board
     const [loading, setLoading] = useState<boolean>(true);
     //Error state for Widget Board
@@ -451,5 +449,3 @@ const CreateRow = (sortOrder: number, rowType: string, wbID: number) => {
 
     return newRow
 }
-
-export default WidgetBoard;
